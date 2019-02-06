@@ -1,0 +1,5 @@
+#To update file in index avoid OS
+git update-index --chmod=+x <file>
+
+#Or if file isn't in index yet
+git add --chmod=+x <file>
