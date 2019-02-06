@@ -1,0 +1,19 @@
+#To update file in index avoid OS
+git update-index --chmod=+x <file>
+
+#Or if file isn't in index yet
+git add --chmod=+x <file>
+
+#to add file avoid .gitignore (force)
+git add -f .idea/../someNeededFile
+
+#To see the commit
+git show <commitID>
+#Current commit
+git show --pretty=fuller
+
+#To set athor of commit. You will be commiter but code author - can be some one else
+git commit --author='John Snow <johnSnow@gmail.com>' --date='...' 
+
+#to discard changes from index
+git reset HEAD .idea
