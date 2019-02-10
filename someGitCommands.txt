@@ -17,3 +17,24 @@ git commit --author='John Snow <johnSnow@gmail.com>' --date='...'
 
 #to discard changes from index
 git reset HEAD .idea
+
+#to add some code from file
+git add -p <file>
+
+#To commit with add, BUT This won't work with untracked (not in index) files.  
+git commit -am 'message'
+
+#Commit specific file, file, directories.
+git commit -m 'message' <file/files/dir>
+
+#git add . -> adds only current directory
+#git add -A -> no matter where are you, adding all from root. 
+
+#To remove directory, automaticly git will add this change to index
+git rm -r dirtoDelete
+
+#to remove drom index - but make untracked
+git rm -r --cached file/dirToRemoveFromChach
+
+#to rename
+git mv file1 file2
