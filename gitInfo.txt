@@ -45,3 +45,7 @@ git mv file1 file2
 # git branch -v shows the commit on what commit branch is looking
 
 #.git/refs/HEAD - current branch
+
+After you done a coomit - it contains information about previous commit, 
+on the base of it was created, and HEAD link points on new commit.
+Commit that HEAD is pointing to - called TOP of hte branch.
