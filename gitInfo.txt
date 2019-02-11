@@ -49,3 +49,8 @@ git mv file1 file2
 After you done a coomit - it contains information about previous commit, 
 on the base of it was created, and HEAD link points on new commit.
 Commit that HEAD is pointing to - called TOP of hte branch.
+
+Commits that lead to the state of current branch - belongs to branch.
+For example in maser we have 3 commits, than we checkout to feature and 
+made 2 commits more. all 5 commits belongs to feature branch, since thay lead
+to it state, and 3 commits belongs to master branch.
