@@ -38,3 +38,10 @@ git rm -r --cached file/dirToRemoveFromChach
 
 #to rename
 git mv file1 file2
+
+#Cchery pick - to get some commit from branch and merge it with other branch 
+
+#branch - it's just a link to some commit. You can check it in .git/refs/heads/
+# git branch -v shows the commit on what commit branch is looking
+
+#.git/refs/HEAD - current branch
