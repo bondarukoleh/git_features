@@ -45,3 +45,38 @@ git mv file1 file2
 # git branch -v shows the commit on what commit branch is looking
 
 #.git/refs/HEAD - current branch
+
+#will delete all uncommited changes
+git checkout -f branch 
+
+#will checkoout on commit that HEAD refers, means return the branch in last commit state
+#Even that was added to index
+git co -f HEAD (or git co -f, if the branch isn't set - will grab current branch HEAD)
+
+#stashes all changes
+git stash
+
+#return changes (no matter that you stashed changes in other branch)
+git stash pop
+
+Checkout will be forbitten only if git should replace some changes from branchA in branchB, 
+if co could be done without any changes - it will be done.
+Also If you on develop and realise thet changes should have separate branch -  
+it's not a problem to create separate branch by git co -b newBranch.
+develop last commit and HEAD of newBranch is pointing on the same commit - so the branches are same,
+but you have now all changes in newBranch, and you can easily continue.
+
+Situation. You've done a 2b, 3c, 4d commits in develop, and realise that they should be in separate
+branch. One way to solve this:
+Create and checkout to a branch where you want these commits be.
+1. git checkout -b extraCommits (now these commits in two branches develop and extraCommits);
+Recreate a develop branch with HEAD on commit before you made a 1a, 2b, 3c commits.
+2. git branch -f develop 1a (force needed because git won't let you to create existing branch)
+That's all, now branch extraCommits has 2b, 3c, 4d commits, and develop is on 1a commit.
+If you change your mind - you can set develop back
+git branch -f develop extraCommits (instead 4d commit, you can set a branch name,
+it will set last commit of develop to the commit that extraCommits' HEAD is pointing to)
+
+Same stuff we can do with checkout.
+1. git checkout -b extraCommits
+2. git checkout -B develop 1a (-B - for existing branch, it will set last commit for develop to 1a);
