@@ -110,3 +110,10 @@ move it to your branch.
 
 To co some file from previos commit - in current branch
 git co 1mj3n4 neededFileFromPreviosCommit.
+
+When you pass a commit id / or branch name (with is equal to commit branch TOP pointing to)
+and pass a file name/directory/few files name - git doesn't switch a branch, it returns a file
+to state of that commit.
+
+If you want to switch file back to current directory state
+git co HEAD neededFileFromPreviosCommit.
