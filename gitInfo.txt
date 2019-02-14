@@ -116,4 +116,11 @@ and pass a file name/directory/few files name - git doesn't switch a branch, it 
 to state of that commit.
 
 If you want to switch file back to current directory state
-git co HEAD neededFileFromPreviosCommit.
+git co HEAD neededFileFromPreviosCommit // returns file from repository to index and working directory (current branch)
+or git co neededFileFromPreviosCommit // returns from index to working directory
+
+if folder named develop and you want to revert it to current state, you need to add --
+git co -- develop (everything after -- counts as a path, not branch)
+
+BRANCH HISTORY
+to see in v
