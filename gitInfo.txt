@@ -153,6 +153,11 @@ It takes a lates commit wih these words. Branch is not counting.
 git show :/'some Words From Commit'
 
 MERGE
-Checkout in branch you want to merge in
+Checkout in branch you want to merge in. BE CAREFULL this will create a merge commit.
 git checkout develop
 git merge featureBranch
+
+git helping us witha merge - storing last before merge commit in current branch in ORIG_HEAD
+cat .git/ORIG_HEAD - stores last commit
+to return develop in previous state we cat use it
+git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
