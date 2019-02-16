@@ -1,3 +1,4 @@
+WORKING WITH FILES
 #To update file in index avoid OS
 git update-index --chmod=+x <file>
 
@@ -7,6 +8,10 @@ git add --chmod=+x <file>
 #to add file avoid .gitignore (force)
 git add -f .idea/../someNeededFile
 
+#to rename
+git mv file1 file2
+
+WORKING WITH COMMIT
 #To see the commit
 git show <commitID>
 #Current commit
@@ -18,9 +23,6 @@ git commit --author='John Snow <johnSnow@gmail.com>' --date='...'
 #to discard changes from index
 git reset HEAD .idea
 
-Remove file from index:
-git reset ./someFile.js
-
 #to add some code from file
 git add -p <file>
 
@@ -30,18 +32,20 @@ git commit -am 'message'
 #Commit specific file, file, directories.
 git commit -m 'message' <file/files/dir>
 
+INDEX
 #git add . -> adds only current directory
 #git add -A -> no matter where are you, adding all from root. 
 
 #To remove directory, automaticly git will add this change to index
 git rm -r dirtoDelete
 
+Remove file from index:
+git reset ./someFile.js
+
 #to remove drom index - but make untracked
 git rm -r --cached file/dirToRemoveFromChach
 
-#to rename
-git mv file1 file2
-
+BRANCH
 #Cchery pick - to get some commit from branch and merge it with other branch 
 
 #branch - it's just a link to some commit. You can check it in .git/refs/heads/
@@ -108,7 +112,7 @@ git cob/branch branchFromDetached
 Or if you've made detached commit 3c-detached, you can cherry-pick it to your branch, it takes this commit and 
 move it to your branch.
 
-To co some file from previos commit - in current branch
+To checkout some file from previos commit - in current branch
 git co 1mj3n4 neededFileFromPreviosCommit.
 
 When you pass a commit id / or branch name (with is equal to commit branch TOP pointing to)
@@ -123,4 +127,32 @@ if folder named develop and you want to revert it to current state, you need to 
 git co -- develop (everything after -- counts as a path, not branch)
 
 BRANCH HISTORY
-to see in v
+to see in one line
+git log --oneline
+
+you can pass a commit or branch
+git log 32fj/featureMranch
+
+see datailed commit info, by default - it will be HEAD, but we can pass a commit
+git show /featureBranch/234fjs
+
+tilda - to see one commit behind, --quiet - to see only general info
+git show HEAD~ --quiet (or you can pass a count of titldes HEAD~3)
+
+A shourtcut for HEAD is at sighn
+git show @~2 (Windows - "@~")
+
+To see whole file from commit before
+git show @~:fileToshow
+
+If you index some file and change something and want to see index version of file
+git show :fileToshow
+
+If you want to see the commit but remember ony commit message - you can run.
+It takes a lates commit wih these words. Branch is not counting.
+git show :/'some Words From Commit'
+
+MERGE
+Checkout in branch you want to merge in
+git checkout develop
+git merge featureBranch
