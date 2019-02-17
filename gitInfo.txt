@@ -1,49 +1,49 @@
 WORKING WITH FILES
 #To update file in index avoid OS
-git update-index --chmod=+x <file>
+$>git update-index --chmod=+x <file>
 
 #Or if file isn't in index yet
-git add --chmod=+x <file>
+$>git add --chmod=+x <file>
 
 #to add file avoid .gitignore (force)
-git add -f .idea/../someNeededFile
+$>git add -f .idea/../someNeededFile
 
 #to rename
-git mv file1 file2
+$>git mv file1 file2
 
 WORKING WITH COMMIT
 #To see the commit
-git show <commitID>
+$>git show <commitID>
 #Current commit
-git show --pretty=fuller
+$>git show --pretty=fuller
 
 #To set athor of commit. You will be commiter but code author - can be some one else
-git commit --author='John Snow <johnSnow@gmail.com>' --date='...' 
+$>git commit --author='John Snow <johnSnow@gmail.com>' --date='...' 
 
 #to discard changes from index
-git reset HEAD .idea
+$>git reset HEAD .idea
 
 #to add some code from file
-git add -p <file>
+$>git add -p <file>
 
 #To commit with add, BUT This won't work with untracked (not in index) files.  
-git commit -am 'message'
+$>git commit -am 'message'
 
 #Commit specific file, file, directories.
-git commit -m 'message' <file/files/dir>
+$>git commit -m 'message' <file/files/dir>
 
 INDEX
 #git add . -> adds only current directory
 #git add -A -> no matter where are you, adding all from root. 
 
 #To remove directory, automatically git will add this change to index
-git rm -r dirtoDelete
+$>git rm -r dirtoDelete
 
 Remove file from index:
-git reset ./someFile.js
+$>git reset ./someFile.js
 
 #to remove from index - but make untracked
-git rm -r --cached file/dirToRemoveFromCache
+$>git rm -r --cached file/dirToRemoveFromCache
 
 BRANCH
 #Cchery pick - to get some commit from branch and merge it with other branch 
@@ -67,17 +67,17 @@ made 2 commits more. all 5 commits belongs to feature branch, since thay lead
 to it state, and 3 commits belongs to master branch.
 
 #will delete all uncommitted changes
-git checkout -f branch 
+$>git checkout -f branch 
 
 #will checkout on commit that HEAD refers, means return the branch in latest commit's state
 #Even that was added to index
-git co -f HEAD (or git co -f, if the branch isn't set - will grab current branch HEAD)
+$>git co -f HEAD (or git co -f, if the branch isn't set - will grab current branch HEAD)
 
 #stashes all changes
-git stash
+$>git stash
 
 #apply changes on current branch (no matter that you stashed changes in other branch)
-git stash pop
+$>git stash pop
 
 Checkout will be forbidden only if git should replace some changes from branchA in branchB,
 if co could be done without any changes - it will be done.
@@ -89,28 +89,29 @@ but you have now all changes in newBranch, and you can easily continue.
 Situation. You've done a 2b, 3c, 4d commits in develop, and realise that they should be in separate
 branch. One of ways to solve this:
 Create and checkout to a branch where you want these commits to be:
-1. git checkout -b extraCommits (now these commits in two branches develop and extraCommits);
+1. $>git checkout -b extraCommits (now these commits in two branches develop and extraCommits);
 Recreate a develop branch with TOP on commit before you made a 1a, 2b, 3c commits:
-2. git branch -f develop 1a (force needed because git won't let you to create existing branch)
+2. $>git branch -f develop 1a (force needed because git won't let you to create existing branch)
 That's all, now branch extraCommits has 2b, 3c, 4d commits, and develop is on 1a commit.
 If you change your mind - you can set develop back
-git branch -f develop extraCommits (instead 4d commit, you can set a branch name,
+$>git branch -f develop extraCommits (instead 4d commit, you can set a branch name,
 it will set TOP of develop to the commit that extraCommits' HEAD is pointing to)
 
 Same stuff we can do with checkout.
-1. git checkout -b extraCommits
-2. git checkout -B develop 1a (-B - for existing branch, it will set last commit for develop to 1a);
+1. $>git checkout -b extraCommits
+2. $>git checkout -B develop 1a (-B - for existing branch, it will set last commit for develop to 1a);
 
 Detached HEAD.
 You can switch to any commit that you like
-git co 3c
+$>git co 3c
 But be aware that this is state of detached HEAD, means you are not in branch
 your HEAD is pointing on commit, not on branch's TOP. And if you will do a commit in this state - it will be
 nowhere, if you like to continue working from this state - you can create a new branch for this
 commit.
-git cob/branch branchFromDetached
+$>git cob/branch branchFromDetached
 Or if you've made detached commit 3c-detached, you can cherry-pick it to your branch, it takes this commit and 
 move it to your branch.
+$>git cherry-pick ej32
 
 To checkout some file from previous commit - in current branch
 git co 1mj3n4 neededFileFromPreviousCommit.
@@ -120,44 +121,75 @@ and pass a file name/directory/few files name - git doesn't switch a branch, it 
 to state of that commit.
 
 If you want to switch file back to current directory state
-git co HEAD neededFileFromPreviosCommit // returns file from repository to index and working directory (current branch)
-or git co neededFileFromPreviosCommit // returns from index to working directory
+$>git co HEAD neededFileFromPreviosCommit // returns file from repository to index and working directory (current branch)
+or $>git co neededFileFromPreviosCommit // returns from index to working directory
 
 if folder named develop and you want to revert it to current state, you need to add --
-git co -- develop (everything after -- counts as a path, not branch)
+$>git co -- develop (everything after -- counts as a path, not branch)
 
 BRANCH HISTORY
 to see in one line
-git log --oneline
+$>git log --oneline
 
 you can pass a commit or branch
-git log 32fj/featureMranch
+$>git log 32fj/featureMranch
 
 see datailed commit info, by default - it will be HEAD, but we can pass a commit
-git show /featureBranch/234fjs
+$>git show /featureBranch/234fjs
 
 tilda - to see one commit behind, --quiet - to see only general info
-git show HEAD~ --quiet (or you can pass a count of titldes HEAD~3)
+$>git show HEAD~ --quiet (or you can pass a count of titldes HEAD~3)
 
 A shourtcut for HEAD is at sighn
-git show @~2 (Windows - "@~")
+$>git show @~2 (Windows - "@~")
 
 To see whole file from commit before
-git show @~:fileToshow
+$>git show @~:fileToshow
 
 If you index some file and change something and want to see index version of file
-git show :fileToshow
+$>git show :fileToshow
 
 If you want to see the commit but remember ony commit message - you can run.
 It takes a lates commit wih these words. Branch is not counting.
-git show :/'some Words From Commit'
+$>git show :/'some Words From Commit'
 
 MERGE
 Checkout in branch you want to merge in. BE CAREFULL this will create a merge commit.
-git checkout develop
-git merge featureBranch
+$>git checkout develop
+$>git merge featureBranch
 
 git helping us witha merge - storing last before merge commit in current branch in ORIG_HEAD
-cat .git/ORIG_HEAD - stores last commit
+$>cat .git/ORIG_HEAD - stores last commit
 to return develop in previous state we cat use it
-git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
+$>git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
+
+DELETE
+Difference between -d and -D - is
+-d needed when you've already megre featureBranch with develop - and you don't want it since since 
+TOP of feature branch is now in develop.
+But if featureBranch - is not merged yet, and it's a risky operation - git won't let you to do it. 
+Because commits from deleted branch - will be unreacheble. But if you still want to do it -D.
+If you want to revert deletion - in short time it's posible, you can recreate a branch with HEAD
+pointing on that commit that you want from deleted branch
+$>git checkout -b featureBranch 123d
+
+REFLOG
+Git logs every movement. You can checkout every change HEAD link for example. All logs are in .git/logs/
+to see logs for HEAD
+$>cat .git/logs/HEAD
+But there is a special command
+$>git reflog (by default will show for HEAD, but we cat pass an argument)
+$>git reflog develop
+But if you've delete branch - here won't be any info about deleted branch (it will be here .git/logs/HEAD)
+
+So to restore branch on some commit you cat
+$>git checkout -b lostBranch "HEAD@{5}" (quotes for shell, {number} - it's a count of commit in logs)
+
+reflog - it's an alias got log. So many log flags - is suitable here
+$>git reflog (same as git log --online -g)
+$>git reflog --date=iso (with date)
+
+fast checkout on previus branch via reflog, but be aware that branch should existing
+$>git checkout @{-1} (1 checkout back, {-2} - two);
+or even more shorter
+$>git checkout - (but in UNIX as far as I get)
