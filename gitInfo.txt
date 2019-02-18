@@ -168,7 +168,7 @@ Difference between -d and -D - is
 -d needed when you've already megre featureBranch with develop - and you don't want it since since 
 TOP of feature branch is now in develop.
 But if featureBranch - is not merged yet, and it's a risky operation - git won't let you to do it. 
-Because commits from deleted branch - will be unreacheble. But if you still want to do it -D.
+Because commits from deleted branch - will be unreachable. But if you still want to do it -D.
 If you want to revert deletion - in short time it's posible, you can recreate a branch with HEAD
 pointing on that commit that you want from deleted branch
 $>git checkout -b featureBranch 123d
@@ -193,3 +193,38 @@ fast checkout on previus branch via reflog, but be aware that branch should exis
 $>git checkout @{-1} (1 checkout back, {-2} - two);
 or even more shorter
 $>git checkout - (but in UNIX as far as I get)
+
+Involve garbadge collector. Amount of days unreachable commits are storing is settet in settings.
+$>git gc
+
+Show unreachable objects
+$>git fsck --unreachable
+
+While TOP of any branch is existing - exists all their parents, and we can restore deleted information.
+If you need to clear branch from fat files, or clean commits from that files you have
+git filter-branch, or third-party BFG, it can help to filter commits, of make them unreachable, so 
+garbadge collector will delete them.
+
+TAG
+Simple tags:
+We can mark a commit with a tag. It's simple marker of commit, nothing more, cool thing about tag - is
+that it's not moving anywhere. It's like a fact.  
+$>git tag release_0.0.1 release_commit
+
+And we can create a branch using tag (link to some commit)
+$>git checkout -b fix_release_0.0.1 release_0.0.1
+delete tag
+$> git tag -d release_0.0.1
+
+Tags has a lot of filter flags.
+Tags with annotation, different from simple - contain information message, date, author.
+#>git tag -a some_info_tag 463hki (or git tag -a -m 'It is a short message about this tag' some_info_tag 463hki)
+
+to check the message, we can
+$>git show some_info_tag
+
+With git describe - we cat check the nearest tag of the commit.
+$>git describe release_commit (will show release_0.0.1 tag)
+
+With git archive we cat do archive from some commit. And also we can use tag here.
+$>git archive some_info_tag
