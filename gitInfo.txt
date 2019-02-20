@@ -1,3 +1,8 @@
+There are 3 major states in git
+Working directory - where your unindex changes are
+Index - where your changes added to index
+Repository - commited changes to repository.
+
 WORKING WITH FILES
 #To update file in index avoid OS
 $>git update-index --chmod=+x <file>
@@ -239,13 +244,15 @@ to unzip
 $>unzip ./temp/info_tag-2-g461dc07.zip
 
 RESET
+--HARD
 To revert branch TOP to some commit we can use reset.
 Simpliest way to do it:
 $>git reset --hard sdj23 (previous commit) same as
 $>git reset --hard @~ (@ - HEAD, ~ - previous commit)
 
 This will make latest TOP of the branch - unreachable from branch.
-It will be deleted with time. reset will revert branch, index to previos commit state.
+It will be deleted with time. reset will delete working directory and index changes,
+and set HEAD and TOP to previous commit.
 
 To undo reset we can reset once more but to latest TOP.
 $>git reset --hard 34s3d (latest commit)
@@ -253,3 +260,7 @@ If we forgot commit id - we can find it in reflog
 $>git reflog master
 Or there is another way, git before reseting branch HEAD - logs commit to .git/ORIG_HEAD, so
 $>git reset --hard ORIG_HEAD
+
+--SOFT
+$>git reset --soft @~
+will move HEAD to previous commit, but it won
