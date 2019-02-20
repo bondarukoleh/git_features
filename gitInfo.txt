@@ -218,7 +218,8 @@ $> git tag -d release_0.0.1
 
 Tags has a lot of filter flags.
 Tags with annotation, different from simple - contain information message, date, author.
-#>git tag -a some_info_tag 463hki (or git tag -a -m 'It is a short message about this tag' some_info_tag 463hki)
+#>git tag -a some_info_tag 463hki (or git tag -a -m 'It is a short message about this tag'
+some_info_tag 463hki)
 
 to check the message, we can
 $>git show some_info_tag
@@ -227,8 +228,8 @@ With git describe - we cat check the nearest tag of the commit.
 $>git describe release_commit (will show release_0.0.1 tag)
 
 $>git describe HEAD
-info_tag-2-g461dc07 (says that nearest tag is info_tag, we are 2 commit ahead of it, and commit where we are)
-
+info_tag-2-g461dc07 (says that nearest tag is info_tag, we are 2 commit ahead of it,
+and commit where we are)
 
 With git archive we cat do archive from some commit. And also we can use tag here.
 $>git archive some_info_tag
@@ -236,3 +237,19 @@ $>git archive -o ./temp/info_tag-2-g461dc07.zip some_info_tag (-o where to make 
 
 to unzip
 $>unzip ./temp/info_tag-2-g461dc07.zip
+
+RESET
+To revert branch TOP to some commit we can use reset.
+Simpliest way to do it:
+$>git reset --hard sdj23 (previous commit) same as
+$>git reset --hard @~ (@ - HEAD, ~ - previous commit)
+
+This will make latest TOP of the branch - unreachable from branch.
+It will be deleted with time. reset will revert branch, index to previos commit state.
+
+To undo reset we can reset once more but to latest TOP.
+$>git reset --hard 34s3d (latest commit)
+If we forgot commit id - we can find it in reflog
+$>git reflog master
+Or there is another way, git before reseting branch HEAD - logs commit to .git/ORIG_HEAD, so
+$>git reset --hard ORIG_HEAD
