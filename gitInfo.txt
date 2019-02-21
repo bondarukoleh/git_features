@@ -290,7 +290,7 @@ $>git reset --soft ORIG_HEAD
 $>git commit -C ORIG_HEAD --reset-author
 
 So it's just softly reset HEAD to previous commit, than commits all changes from index.
-But soft reset is more poverfull, it gives you ability to make with branch what ever you want.
+But soft reset is more powerfull, it gives you ability to make with branch what ever you want.
 For example you have done 1,2,3 commits, and want to make them 1.
 $>git reset --soft 0commit
 Your HEAD on state where you didn't do anything, but all changes from 1,2,3 commits in index now.
@@ -316,4 +316,15 @@ $>git reset 23h5 ./someFile.js (reset file in index to some commit)
 if you want these changes not only in index - checkout
 $>git checkout 23h5 ./someFile.js
 
+--KEEP
+Will revert to some commit, but changes that now in working directory it will try to keep.
+Be carefull, if file was changed between commits - it will revert it, without save.
+So it mostly like --hard but with keeping changes that possible in working directory.
+If it sees that it cannot revert some files without conflicts - it won't do it. 
+So as far as I get - if you wand to reset a file, but keep your changes in working directory - 
+that's your choise.
+One more feature - it's make reset --keep without arguments, means to current HEAD.
+It will remove all changes from index, but keep all changes that in this moment in working directory,
+useful when you merge something.
 
+$>git reset help - will show also a table what reset will do in different situations.
