@@ -326,5 +326,11 @@ that's your choise.
 One more feature - it's make reset --keep without arguments, means to current HEAD.
 It will remove all changes from index, but keep all changes that in this moment in working directory,
 useful when you merge something.
-
 $>git reset help - will show also a table what reset will do in different situations.
+
+--MERGE
+Aimed on reseting erronneous merge.
+Reseting repository and index, keeps changes in working directory if it can.
+Most frequent usage - without any argument
+$>git reset --merge
+It will delete  all changes in index. can be usefull in merge process.
