@@ -37,6 +37,11 @@ $>git commit -am 'message'
 #Commit specific file, file, directories.
 $>git commit -m 'message' <file/files/dir>
 
+$>git commit -v (verbose)
+Will add in commit message difference between indexed changes that we going to commit
+and HEAD of branch, it will add diff under cizors part - so it won't appear in commit
+message, it's ust for you, to better understand what you will commit. 
+
 INDEX
 #git add . -> adds only current directory
 #git add -A -> no matter where are you, adding all from root. 
@@ -282,7 +287,7 @@ $>git log --pretty-fuller
 If you want only commit message:
 $>git commit -C ORIG_HEAD --reset-author
 
---AMEND
+AMEND
 This is special for changing latest commit. it's the same thing that we done before.
 $>git commit --amend --reset-author --no-edit (to not involde a text redactor for changing the message)
 same as:
@@ -331,6 +336,53 @@ $>git reset help - will show also a table what reset will do in different situat
 --MERGE
 Aimed on reseting erronneous merge.
 Reseting repository and index, keeps changes in working directory if it can.
+If changes for some file in index - and we reseting on one commit back - chnges will be
+deleted from index and from working directory. But if no changes in index - changes for
+file - will be saved in working directory.
 Most frequent usage - without any argument
 $>git reset --merge
-It will delete  all changes in index. can be usefull in merge process.
+It will delete all changes in index, for rest files - changes will be in working directory.
+Can be usefull in merge process.
+
+CLEAN
+For deleting not tracked files and directories. If you have some generated stuff or downloaded
+- it will help you.
+$>git clean -d(for directories)x(for files even in gitignore)f(to make it work)
+
+So for cleanup whole project we need to reset hard on HEAD, and make clean -dxf
+
+DIFF
+$>git diff 3jo3i 64ml5 (or develop feature, or develop..feature)
+It will show diff blocks, hangs, that will show difference between two branches:
+diff --git a/gitInfo.txt b/gitInfo.txt (showing that develop branch is - a, and feature is b)
+index 56cb5e6..779c279 100644 (hash sum of gitInfo.txt in develop is 56cb5e6, in feature - 779c279,
+   100644 - file type, 100 - regular file, 644 - not executable);
+--- a/gitInfo.txt (name file, if it's not deleted, renamed, or changed somehow)
++++ b/gitInfo.txt
+@@ -1,56 +1,44 @@ hang headre(sometimes it's here) (If in develop you'll change, as it shows in termminal,
+from 1st row, 56th rows - you'll get file that you've got in feature and it will be from 1st row till 44th row.)
+
+$>git diff develop...feature
+Will compare what was changed in feature from commit that it was branched from develop.
+Means it will compare commit where feature was born with TOP of feature.
+
+$>git diff fk4g (HEAD for example)
+Will show difference between current working directory changes wih commit.
+git diff - defferent with git diff HEAD, without argument - it will show diff with cyrrent index, not commit.
+Be aware that these types of commands - ignore untracked files.
+
+$>git diff --cached/--staged HEAD
+Show difference beetwen index and HEAD. Useful to see what we will commit after we add changes in index.
+
+$>git diff (nothing - to compare with index, HEAD to compare with head) file.js
+$> git diff develop feature file.js (you can add a few files here to save time)
+Show changes of some particular file, depending on what you want to see.
+
+$>git diff --name-only e24412
+show only files that changed, after that you can look more detailed for file you're interested in.
+
+$>git diff master:file1.js develop:file2.js
+compare two different files from two different commits.
+
+$>git diff --no-index file1.js file2.js
+compare any two files on machime, no matter what it is, and in our repository or not.
