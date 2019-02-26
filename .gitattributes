@@ -1,0 +1,4 @@
+* text=auto
+#Use html diff words regexp for html files 
+*.html diff=html
+*.css diff=css

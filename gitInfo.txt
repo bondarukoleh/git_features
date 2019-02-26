@@ -385,4 +385,7 @@ $>git diff master:file1.js develop:file2.js
 compare two different files from two different commits.
 
 $>git diff --no-index file1.js file2.js
-compare any two files on machime, no matter what it is, and in our repository or not.
+compare any two files on machine, no matter what it is, and in our repository or not.
+
+$>git diff --word-diff (--color-words - will show only words without brackets stuff)
+compare sentenses, with comfortable, clear difference.
