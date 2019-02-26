@@ -1,3 +1,3 @@
 # Git features
 
-Playing around with dit.
+*Playing around with git.*

@@ -389,3 +389,20 @@ compare any two files on machine, no matter what it is, and in our repository or
 
 $>git diff --word-diff (--color-words - will show only words without brackets stuff)
 compare sentenses, with comfortable, clear difference.
+
+Also you can exend local git config .git/config - with new diff features. i.e. add markdown
+hendler (driver) in diff.
+[diff "markdown"]
+        # POSIX extended
+        xfuncname = "^#+[[:space:]]+.+$" (it's for deff header, just a tip to diff be more readable)
+        wordRegex = "\\*+|[^[:space:]*]+" (for word, how git will understand that this is a word)
+and now you can add a *.md diff=markdown in your .gitattributes.
+
+Also you can setup diff for images, and other non text files. 
+For that you can use non-git utilites, and set them to config file
+[diff "myOwnDiffTool"]
+      command = sh -c 'icdiff "$1" "$4"'
+and in gitattributes *.png diff = myOwnDiffTool
+Means, that when I will call diff on png file, git will pass arguments (path to diff files,
+commits, hashsum and others) to icdiff tool, but we want to have only pathes to files, thats
+why we pass to icdiff first and forth arguments.
