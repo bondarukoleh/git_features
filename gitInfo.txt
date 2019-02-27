@@ -406,3 +406,28 @@ and in gitattributes *.png diff = myOwnDiffTool
 Means, that when I will call diff on png file, git will pass arguments (path to diff files,
 commits, hashsum and others) to icdiff tool, but we want to have only pathes to files, thats
 why we pass to icdiff first and forth arguments.
+
+LOG
+Shows commits reachable from HEAD
+
+$>git log
+By default it runs with flag --pretty=medium (commitID, author, date, commit message)
+$>git log --pretty=oneline (gives us commitID and message) --abbrec-commit (to make commitID short) 
+same as 
+$>git log --oneline
+
+log is very customizable. i.e.
+$>git log --pretty=format:'%h %cd | %s%d [%an]'
+Show us custom log info where:
+%h - short commitID
+%cd - date
+%s - commit message first line
+%d - decorator string, pointing HEAD, branch etc.
+[%an] - author in brackets
+We can find all flags in git help log
+
+Also we can edit collors. We can check them in git help config
+$>git log --pretty=format:'%C(yellow)%h %C(red)%cd | %C(green)%s%d %C(dim green)[%an]'
+
+See git log with changes.
+$>git log --patch (-p)
