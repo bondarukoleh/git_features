@@ -426,8 +426,33 @@ Show us custom log info where:
 [%an] - author in brackets
 We can find all flags in git help log
 
-Also we can edit collors. We can check them in git help config
+Also we can edit collors. We can check them in git help config.
+normal, black, red, green, yellow, blue, magenta, cyan and white
+bold, dim, ul, blink, reverse, italic, and strike
 $>git log --pretty=format:'%C(yellow)%h %C(red)%cd | %C(green)%s%d %C(dim green)[%an]'
 
 See git log with changes.
 $>git log --patch (-p)
+
+$>git log master
+Show commits from master
+
+$>git log master develop --graph ($>git log --all --graph) 
+Show branches commits lite tree, graph
+
+$>git log feature ^master
+same $>git log master..feature
+or if you are in one of needed branch
+master$>git log HEAD..feature (same as git log ..feature)
+Show commits done after branching from master.
+So it show feature commits unreachable from master
+
+oposite:
+master$>git log feature..
+Shows master commits that isn't reachable from feature branch. cool.
+
+$>git log master...feature --boundary --graph
+... - commits reachable from master and feature, but not for both branches same time.
+- boundary - will show the commit where branches where divided.
+
+
