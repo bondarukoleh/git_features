@@ -455,4 +455,11 @@ $>git log master...feature --boundary --graph
 ... - commits reachable from master and feature, but not for both branches same time.
 - boundary - will show the commit where branches where divided.
 
+$>git log myFile.js (git log -p myFile.js - with changes made in that file,
+--follow - if the file was changed, git findes changes for changed file also)
+Shows commits where this file was changed.
+
+If you wanted to see differentse between file in branches
+$>git log feature..master myFile.js
+
 
