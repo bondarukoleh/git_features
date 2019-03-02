@@ -462,4 +462,16 @@ Shows commits where this file was changed.
 If you wanted to see differentse between file in branches
 $>git log feature..master myFile.js
 
+Search for commits by message
+$>git log --grep 'word from message'
+$>git log --grep 'word from message' featureBranch (in some branch)
+$>git log --grep 'thisWord|orThisWord' -P -i (Perl friendly reqexp, ignore case)
+
+You want to find all commits where some function was added.
+$>git log -GfunctionNameRegexp -p (p - show changes)
+
+More important and pwerfull search - it's you wand to find all changes that was made
+in some function. You need to add -L flag and set a regexp to start search from
+and regexp where to end. Also it's usefull to set the file you want to search in.
+$>git log -L '/<head>/','/<\/head>/':somefile.html
 
