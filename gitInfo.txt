@@ -594,3 +594,7 @@ Usefull to add --log when you merging. It adds a commit messages from feature br
 to merge commit message. It help you to realise what kind of changes where done by commit
 messages, so it's like a little story.
 develop$>git merge feature --log=5 (5 last commit messages added from feature branch)
+
+After merge - if we tap git log - it will show all commits from develop? and all commits from
+feature. Thats not that we are looking for as usual, so to see commits only from develop
+$>git log --oneline --first-parent (with condition that every merge was from develop)
