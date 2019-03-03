@@ -56,7 +56,7 @@ $>git reset ./someFile.js
 $>git rm -r --cached file/dirToRemoveFromCache
 
 BRANCH
-#Cchery pick - to get some commit from branch and merge it with other branch 
+#Chery pick - to get some commit from branch and merge it with other branch 
 
 #branch - it's just a link to some commit. You can check it in .git/refs/heads/
 # git branch -v shows the commit on what commit branch is looking
@@ -162,16 +162,6 @@ $>git show :fileToshow
 If you want to see the commit but remember ony commit message - you can run.
 It takes a lates commit wih these words. Branch is not counting.
 $>git show :/'some Words From Commit'
-
-MERGE
-Checkout in branch you want to merge in. BE CAREFULL this will create a merge commit.
-$>git checkout develop
-$>git merge featureBranch
-
-git helping us witha merge - storing last before merge commit in current branch in ORIG_HEAD
-$>cat .git/ORIG_HEAD - stores last commit
-to return develop in previous state we cat use it
-$>git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
 
 DELETE
 Difference between -d and -D - is
@@ -298,11 +288,11 @@ So it's just softly reset HEAD to previous commit, than commits all changes from
 But soft reset is more powerfull, it gives you ability to make with branch what ever you want.
 For example you have done 1,2,3 commits, and want to make them 1.
 $>git reset --soft 0commit
-Your HEAD on state where you didn't do anything, but all changes from 1,2,3 commits in index now.
+Your HEAD on state where you didn't do anything, but all changes from 1,2,3 commits are in index now.
 You make a new commit
 $>git commit 4
 HEAD is on 4th commit where all your changes is commited. Here you're are, one commit from 1,2,3
-But be aware, it will help to change only last commit. You can not change 2th commit wand nothing more.
+But be aware, it will help to change only last commit. You can not change 2nd, 3rd commit, only last nothing more.
 It's up to rewriting git history - and for that purpose - rebase is.
 
 --MIXED
@@ -496,3 +486,14 @@ BLAME
 Show the committer of lines in file.
 $>git blame -L 3,6:somefile.html
 $ git blame somefile.html --date=short -L 3,6 (with shorted date)
+
+MERGE
+Checkout in branch you want to merge in. BE CAREFULL this will create a merge commit.
+$>git checkout develop
+$>git merge featureBranch
+
+git helping us witha merge - storing last before merge commit in current branch in ORIG_HEAD
+$>cat .git/ORIG_HEAD - stores last commit
+to return develop in previous state we cat use it
+$>git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
+
