@@ -488,12 +488,35 @@ $>git blame -L 3,6:somefile.html
 $ git blame somefile.html --date=short -L 3,6 (with shorted date)
 
 MERGE
-Checkout in branch you want to merge in. BE CAREFULL this will create a merge commit.
+Checkout in branch you want to merge in.
 $>git checkout develop
 $>git merge featureBranch
+BE CAREFULL this will create a merge commit. What happened - git has moved develop HEAD to
+featureBranch HEAD. So simply develop became same as featureBranch. (with condition that featureBranch
+was branched from develop, and there were no commits in develop branch, so it's not a common case);
 
 git helping us witha merge - storing last before merge commit in current branch in ORIG_HEAD
 $>cat .git/ORIG_HEAD - stores last commit
 to return develop in previous state we cat use it
 $>git branch -f develop ORIG_HEAD - will rectreate develop with HEAD on ORIG_HEAD commit.
 
+So in feature we've done some commits and in develop we've done commits after feature was branched.
+And if we moved HEAD of develop to feature - we will lost our commits from develop.
+So in this situation git makes true merge and analyze each commit and creates a special merge commit,
+were changes from two branches merged together.
+
+develop$>git merge feature
+
+1.Git will find commit where feature was branched from develop. We can do it also with
+git merge-base develop feature.
+2.Git takes in count 3 version of files:
+-1) Base version. It's version of file that was in branching commit.
+-2) Ours - we are on develop branch, that means that ours - is version from HEAD (TOP?)
+of the develop branch.
+-3) Theirs - version from feature HEAD.
+So the formula is:
+base + ours + theirs = file merged version.
+
+If the auto-merge is failed - that brings us to brocken auto-merge state of branch.
+Commit that we are trying to merge with in develop branch - is feature HEAD, and it 
+stores in MERGE_HEAD.(.git/MERGE_HEAD).
