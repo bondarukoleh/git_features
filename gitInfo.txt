@@ -475,3 +475,18 @@ in some function. You need to add -L flag and set a regexp to start search from
 and regexp where to end. Also it's usefull to set the file you want to search in.
 $>git log -L '/<head>/','/<\/head>/':somefile.html
 
+Even more effective type of searching
+$>git log -L :fynctionNane:file.js
+git will try to find function with name and he will think that all of the code before 
+next function - is belong to found function.
+So it will grab commits even if the space beetwen functions is affected.
+But still - it's very effective.
+BUT it works only with function declaration. So it better to find:
+$>git log -L '/^functionName\(/','/^}/':somefile.js
+
+Search by author name or email, or committer
+$>git log --author=Oleh (--author=9000@gmail.com)
+$>git log --committer=someoneWhoMadeACommit
+
+By time:
+git log --after '2019-03-01' --before '2019-03-02'
