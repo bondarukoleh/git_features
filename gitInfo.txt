@@ -137,6 +137,9 @@ or $>git co neededFileFromPreviosCommit // returns from index to working directo
 if folder named develop and you want to revert it to current state, you need to add --
 $>git co -- develop (everything after -- counts as a path, not branch)
 
+To see with what branches current was merged
+$>git branch --merged (oposite to --no-merged)
+
 BRANCH HISTORY
 to see in one line
 $>git log --oneline
@@ -568,3 +571,26 @@ $>git commit (witch make a merge commit and finishes the merge)
 or
 $>git merge --continue (witch is equal to commit.)
 
+So this new commit, merge commit is special. It has not one, as all regular commits have, but
+two ancestors. HEADs of branches that were merged.
+We can see that if we make git log --graph --oneline, or git show/log (the last commit will be
+Merge: 0cbc23b (ORIG_HEAD, develop) 7c50372(MERGE_HEAD, feature)), so log saying to us - that 
+it is a merge commit. Also we can see that diff - is combined by two commits, and commpresed, 
+means - diff shows only changes from conflict files. Also "+" is on different positions, means 
++ changes from feature
+ +changes that was in deelop
+
+If we want to see changes from develop ORIG_HEAD
+$>git show --first-parent
+
+but we can use ^ sigh in diff commant - more usefull for merge commits
+$>git diff HEAD^1 (same as HEAD^) - see difference with develop commit parent 
+$>git diff HEAD^2 - see difference with feature commit parent
+$>git diff HEAD^1^ (same as HEAD^^) - see difference with develop commit previous parent 
+$>git diff HEAD^2^ - see difference with feature commit previous parent
+
+
+Usefull to add --log when you merging. It adds a commit messages from feature branch
+to merge commit message. It help you to realise what kind of changes where done by commit
+messages, so it's like a little story.
+develop$>git merge feature --log=5 (5 last commit messages added from feature branch)
