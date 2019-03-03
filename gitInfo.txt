@@ -517,6 +517,54 @@ of the develop branch.
 So the formula is:
 base + ours + theirs = file merged version.
 
-If the auto-merge is failed - that brings us to brocken auto-merge state of branch.
+If the auto-merge is failed - that brings us to broken auto-merge state of branch. CONFLICT.
 Commit that we are trying to merge with in develop branch - is feature HEAD, and it 
 stores in MERGE_HEAD.(.git/MERGE_HEAD).
+If in develop file wasn't changed but in feature was - git will try to add changes from feature
+to merge commit file version, and visa versa.
+
+So as it was said git trying to help us durring merge.
+If it sees that in develop in file a.js on line 1 - was no changes compare with base file, 
+but in feature in file a.js line 1 was changed compare to base version - it will add in merge 
+commit version of file a.js - changes from feature.
+But if in develop a.js 1st line was changed and in feature a.js line 1 was changed - git doesn't know 
+what to do - and it calls us to intrude and resolve conflict.
+
+So depend where you are, and in this particular case we merging from develop branch - 
+<<<<<<< HEAD (means in current branch HEAD, means in develop code is next)
+  some develop changes
+============
+  some feature changes
+>>>>>>> feature (means in theirs, feature HEAD, means in feature code is beyond)
+
+For example we want to take changes that in develop, then
+$>git checkout --ours a.js (oposite to checkout --theirs a.js)
+Will add in index changes that develop has in a.js file.
+
+If we see that conflicts are pretty serious, and we cannot merge properly - we can:
+- hardly reset file or branch to develop HEAD state, means do not do with it anything.
+git reset --hard
+- if we have some unindex files, and we making a merge - we can use 
+git reset --merge (same as git merge --abort)
+It will reset all files that was afected by merge to develop HEAD state, but won't touch any
+files that was not affected by merging, and was in working directory. Hard reset - will reset all
+files to develop HEAD state.
+
+If you want to see 3 variants of file, you can: 
+$>git checkout --conflict=diff3 --merge a.js 
+
+So you've changed a file as you waned, delete with hands all those unneeded changes "<<<...", etc.
+but you cannot do a coomit now, because when you in merge conflict state, in index - there are
+three variants of file existing. 1 - base, 2 - yours, 3 - theirs. you can check it with
+$>git show :1:a.js
+$>git show :2:a.js
+$>git show :3:a.js
+
+That's why we need to add to index only one version. So
+$>git add a.js (or add .)
+
+After conflicts are resolved, and all in index, we can do either:
+$>git commit (witch make a merge commit and finishes the merge)
+or
+$>git merge --continue (witch is equal to commit.)
+
