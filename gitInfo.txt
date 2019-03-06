@@ -641,8 +641,8 @@ develop$>git merge --ff feature (enable ff for this merge)
 
 SQUASH
 For example you where doing something crazy in feature, a lot off commits, and you are too lazy to make them one.
-If you need to merge changes from branch, but don't want branch changes - then you can grab changes from branch
-and use them in develop.
+If you need to merge changes from branch, but don't want whole branch changes - then you can grab changes from branch
+and use them in develop. So it's NOT MERGE, it's geting changes from feature into develop index.
 develop$>git merge --squash feature
 That will add last changes from feature branch to develop index or working directory. After that you can make a 
 regular commit in develop branch. So you will have clear develop history and changes from feature.
@@ -668,7 +668,8 @@ MERGE STRATEGY
 Recursive.
 Named like that because it can merge from parents that has same parents each other.
 Has features:
--Xours/-Xtheirs - ability to resolve conflicts in favor (пользу) of some branch.
+-Xours/-Xtheirs - ability to resolve conflicts in favor (пользу) of some branch. So changes that not conflicted
+in feature will be merged, but all conflicts resolved in favor of develop, and visa versa.
 $>git merge -Xours feature (or -Xtheirs)
 
 -Xrenormalize - if code in feature has different ends of rows and files, we can try to resole it
@@ -680,15 +681,37 @@ in feature and change it a little bit (less that 50%), and also changed it in de
 in develop - if we merge feature in develop, file will be renamed, and changes from feature and develop
 - will be in it. But that not always great, if we indeed need new file, we can ask git stop to watch renaming
 develop$>git merge -Xno-renames feature
-
 We can ask git to find renamed, as we think files
 $>develop$>git merge -Xfind-renames=80 feature (set that simularity should be 80%)
-
 
 -Xsubtree - We can have separate branch connected to our develop. For example some plugin.
 for subtree - we need to have some folder. We can develop subtree separatly, and merge time to time it to 
 develop. For example we can store some big functionality there, that need to be separate.
-
 develop$>git merge -Xsubtree=plugin(path to plugin folder) --allow-unrelated-histories (if first time adding) pluginBranch
 
+Also there another instrument - submodule. it's different, if subtree - is a separate branch connected to develop
+then submodule - it is a completely different repository connected to current repository, so it's like a subrepository.
 
+Octopus.
+This strategy used when we merge more than two branches.
+develop$>git merge feature1 feature2 (merge will be with octopus strategy)
+Some disadvantages:
+1.If there is a conflict - merge will fail.
+2.Harder to abort merge with some specific branch.
+This strategy used when you have a lot of branches, that implements different functionality, to save time - you
+can merge a few branches at once.
+
+Ours.
+Strategy that completely ignores changes from feature branch. To fire - you should choose it by strategy flag.
+Different from recursive -Xours (that will add non-conflicts from feature). So basicaly it makes merge but doesn't 
+do anything. :-\
+develop$>git merge -s ours feature
+
+Resolve / Subtree.
+Old strategies, that exist by historical reason. Resolve - changed by recursive, wih flags. Subtree - changed by
+recursive with -Xsubtree flag. 
+
+CHERRY-PICK
+For example we have two branches, with two versions of our product. Development runs separately in them.
+and you realise that you have same bug in two branches. Bug is fixed in branch_v1 - you cannot merge them,
+since they are too different, but you can try to cherry-pick fix commit from branch_v1 to branch_v2.
