@@ -6,3 +6,7 @@ function sayHi() {
 function sayBye() {
   alert('Bye!');
 }
+
+function fFunc(){
+  console.log('quiet')  
+}
