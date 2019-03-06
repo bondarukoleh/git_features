@@ -1,6 +1,6 @@
 function sayHi() {
   alert(`Hi, houdy, how's a going?`);
-  const someInnerObject = {'hello':1};
+  // some minor changes in develop
 }
 
 function sayBye() {
