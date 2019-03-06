@@ -1,5 +1,15 @@
 * text=auto
+
 #Use html diff words regexp for html files 
 *.html diff=html
 *.css diff=css
 *.md diff=markdown
+
+#default merge driver for .txt - text
+*.txt merge=text
+
+#default merge driver for .jpg - binary
+*.jpg merge=binary
+
+#We can use another merge driver union. Used for some log files, where info only added not changed.
+/news.md merge=union 

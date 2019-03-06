@@ -647,5 +647,36 @@ develop$>git merge --squash feature
 That will add last changes from feature branch to develop index or working directory. After that you can make a 
 regular commit in develop branch. So you will have clear develop history and changes from feature.
 
-Be aware that for this merge git doesn't create a MERGE_HEAD with a feature HEAD in it. So you cannot do 
-git merge --abort.
+Be aware that for this merge git doesn't create a MERGE_HEAD with a feature HEAD in it. So you cannot do:
+git merge --abort - will be error. (its an alias for: git reset --merge - it will solve problem)
+
+So after resolving conflicts - just make a commit.
+
+Merge driver - it's a technic that git uses to merge files.
+We can edit it in .gitattributes
+union driver - is pretty weak, it adding every rows with every, it's pretty uncomfortable for code but 
+quiet good for some log files, where info only added to the eng for example.
+Git also allows you to create your own merge driver.
+
+MERGE STRATEGY
+-recursive (default)
+-octopus
+-ours
+-resolve
+-subtree
+
+Recursive.
+Named like that because it can merge from parents that has same parents each other.
+Has features:
+-Xours/-Xtheirs - ability to resolve conflicts in favor (пользу) of some branch.
+$>git merge -Xours feature (or -Xtheirs)
+
+-Xrenormalize - if code in feature has different ends of rows and files, we can try to resole it
+Also there a opitions to ignore space changes -Xignore-all-space -Xignore-space-change.
+
+-Xno-renames - if in two branches file renamed different, git will notice that and in merge ask
+you to resolve this situation, choose the file that should stay. Also cool thing is if we renamed file 
+in feature and change it a little bit, and also changed it in develop, but didn't rename - if we merge
+it to develop, file will be renamed, and changes from feature and develop - will be in it.
+
+

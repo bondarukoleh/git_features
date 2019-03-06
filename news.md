@@ -1,0 +1,3 @@
+# Project news
+
+* first news
