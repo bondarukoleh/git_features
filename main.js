@@ -7,6 +7,6 @@ function sayBye() {
   alert('Bye!');
 }
 
-function fFunc(){
-  console.log('quiet')  
+function someFunctionfix(){
+  console.log('fix')  
 }
