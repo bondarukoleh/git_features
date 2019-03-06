@@ -614,14 +614,38 @@ fc0a1bf HEAD@{1}: commit (merge): Merge branch 'feature1' into develop
 $>git reset --hard @{1}
 and we will go back on previous merge commit
 
-Situation, developing features were in two branches, in one branch - some function wwas improved, 
+Situation, developing features were in two branches, in one branch - some function was improved, 
 in other - doesn't improved, and added call for not improved function somewhere. And we made a merge.
 Git didn't complane about merge conflicts - because there was no conflicts in file, just added
-non-improved function call. But code won't work work properly. This situation callem symantic conflict,
-means code is conflicted by cence not by file.
+non-improved function call. But code won't work properly. This situation called symantic conflict,
+means code is conflicted by sence not by file.
 To resolve this situation, we will reset hard on previous commit, and make a merge again but with:
 
 develop$>git merge feature --no-commit
 This will make a merge, but without commit in the end. So we will in merge-conflict state, with changes
 in index, and have ability to fix all sematic conflicts, and then make a merge commit as we will 
 do if there was some file conflict.
+
+Always make a merge commit.
+If there were no commits in develop branch since feature branched from it, and there a few commits in 
+feature - then merge with fetaure will be just simple moving develop HEAD to feature HEAD, fast forward.
+And we have some troubles with it:
+- If there is a bug - we cannot understand easily where merge was done - no merge coomit.
+- We cannot understand on witch commit we should revert.
+So it's better do do merge
+develop$>git merge --no-off feature
+
+$>git config merge.ff false (turn off fast forward merging)
+$>git branch.develop.mergeoptions '--no-ff' (disable ff for develop)
+develop$>git merge --ff feature (enable ff for this merge)
+
+SQUASH
+For example you where doing something crazy in feature, a lot off commits, and you are too lazy to make them one.
+If you need to merge changes from branch, but don't want branch changes - then you can grab changes from branch
+and use them in develop.
+develop$>git merge --squash feature
+That will add last changes from feature branch to develop index or working directory. After that you can make a 
+regular commit in develop branch. So you will have clear develop history and changes from feature.
+
+Be aware that for this merge git doesn't create a MERGE_HEAD with a feature HEAD in it. So you cannot do 
+git merge --abort.
