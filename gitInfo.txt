@@ -340,7 +340,7 @@ Can be usefull in merge process.
 CLEAN
 For deleting not tracked files and directories. If you have some generated stuff or downloaded
 - it will help you.
-$>git clean -d(for directories)x(for files even in gitignore)f(to make it work)
+$>git clean -dxf (d - for directories) (x - for files even in gitignore) (f - to make it work)
 
 So for cleanup whole project we need to reset hard on HEAD, and make clean -dxf
 
@@ -674,9 +674,21 @@ $>git merge -Xours feature (or -Xtheirs)
 -Xrenormalize - if code in feature has different ends of rows and files, we can try to resole it
 Also there a opitions to ignore space changes -Xignore-all-space -Xignore-space-change.
 
--Xno-renames - if in two branches file renamed different, git will notice that and in merge ask
+-Xno-renames - If in two branches file renamed different, git will notice that and in merge ask
 you to resolve this situation, choose the file that should stay. Also cool thing is if we renamed file 
-in feature and change it a little bit, and also changed it in develop, but didn't rename - if we merge
-it to develop, file will be renamed, and changes from feature and develop - will be in it.
+in feature and change it a little bit (less that 50%), and also changed it in develop, but didn't rename
+in develop - if we merge feature in develop, file will be renamed, and changes from feature and develop
+- will be in it. But that not always great, if we indeed need new file, we can ask git stop to watch renaming
+develop$>git merge -Xno-renames feature
+
+We can ask git to find renamed, as we think files
+$>develop$>git merge -Xfind-renames=80 feature (set that simularity should be 80%)
+
+
+-Xsubtree - We can have separate branch connected to our develop. For example some plugin.
+for subtree - we need to have some folder. We can develop subtree separatly, and merge time to time it to 
+develop. For example we can store some big functionality there, that need to be separate.
+
+develop$>git merge -Xsubtree=plugin(path to plugin folder) --allow-unrelated-histories (if first time adding) pluginBranch
 
 
