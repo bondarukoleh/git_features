@@ -718,5 +718,5 @@ since they are too different, but you can try to cherry-pick fix commit from bra
 So the main idea is that cherry pick will grab only changes that were done in branch_v2 (fixed bug) and try
 to apply them on branch_v1. If changes did not depend on previous branch_v2 features, then it successfully 
 add them to develop.
-You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in your index
-in branch_v1.
+You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
+your index in branch_v1.
