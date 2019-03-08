@@ -720,3 +720,24 @@ to apply them on branch_v1. If changes did not depend on previous branch_v2 feat
 add them to develop.
 You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
 your index in branch_v1.
+
+Cherry pick has option to copy a few commits
+$>git cherry-pick -x 2j3h 5j56h 
+$>git cherry-pick -x develop..feature (all commits from point where feature divided from develop,
+all commits that not in develop from feture)
+Cherry-pick will crete commits in develop one by one.
+
+We want to chenge something in cherry-pick, so we don't want auto-commit
+$>git cherry-pick feature --no-commit (same as -n)
+
+Revert cherry-pick
+$>git cherry-pick --abort
+
+If conflict resolved
+$>git cherry-pick --continue
+
+If you want to stop cherry-picking, means we don't want to create commits from feature, after resolving current
+conflict, we can
+$>git cherry-pick --quit
+
+If we made cherry pick and realixe that we don't want it. reset hard on some commit behind.
