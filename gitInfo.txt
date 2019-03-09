@@ -504,6 +504,9 @@ Here we are, feature merged with develop. Log will show:
 >2f
 >1f
 >init
+So when we make merge - we have addition merge commit, and hystory of full development in develop branch
+and feature branch. So it's simple to return on state that you like.
+MERGE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITH MERGE COMMIT and have separate history for development
 
 Checkout in branch you want to merge in.
 $>git checkout develop
@@ -660,6 +663,7 @@ and use them in develop. So it's NOT MERGE, it's geting changes from feature int
 develop$>git merge --squash feature
 That will add last changes from feature branch to develop index or working directory. After that you can make a 
 regular commit in develop branch. So you will have clear develop history and changes from feature.
+SQUASH USE - BRING ONLY CHANGES FROM DEVELOP TO FEATURE INDEX, WITHOUT DEVELOP HISTORY.
 
 Be aware that for this merge git doesn't create a MERGE_HEAD with a feature HEAD in it. So you cannot do:
 git merge --abort - will be error. (its an alias for: git reset --merge - it will solve problem)
@@ -734,6 +738,7 @@ to apply them on branch_v1. If changes did not depend on previous branch_v2 feat
 add them to develop.
 You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
 your index in branch_v1.
+CHERRY PICK USE - GET ONE NEEDED COMMIT TO FEATURE FROM DEVELOP, and don't bring anything else from develop. 
 
 Cherry pick has option to copy a few commits
 $>git cherry-pick -x 2j3h 5j56h 
@@ -782,12 +787,47 @@ In feature we have commits: init, 1f, 2f.
 In develop we have commits: init, 1d, 2d. 
 feature>git rebase develop
 Git will grab TOP of develop (2d) and try to merge it with 1f. 
-After resolving conflicts (or not) - 1f - is no longer 1f - it rebased with 2d - becomes 1df.
-Contiue to rebasing - git grab 2d and merge it with 2f, after resolving, 2f no more - becomes 2df.
+After resolving conflicts (or not) - 1f - is no longer 1f - it rebased with 2d - becomes 1fd.
+Contiue to rebasing - git grab 2d and merge it with 2f, after resolving, 2f no more - becomes 2fd.
 Here we are, feature merged with develop, and with rewrited history. Log will show
->2df (ex 2f)
->1df (ex 1f)
+>2fd (ex 2f)
+>1fd (ex 1f)
 >2d
 >1d
 >init
+When we make rebase - we rewriting our history of development depending on changes from rebasing branch.
+So we will have cleaner history without additional merge commits, but it will be more coplicated to revert
+changes, since there like one straight history of "our" (rewritted) development, so our original development
+is no longer exist - it rewritted with rebased branch.
+REBASE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITHOUT EXTRA COMMIT (but we sacrifice feature commits)
+PROBLEMS in front of merge:
+1. PROHIBITED to rebase publick branches, where not only you working in. So rebase just for your local branches. 
+So you cannot rebase feature in develop, because develop - is common, and you'll rewrite his commits with your changes.
+2. When something goes wrong - and in initial commit after rebase - something broken, we have a bunch of rewritted
+broken commits, and it's not trivial to revert them, even if we fix something, we still have broken commits in history
+whitch is bad thing, we can revert on broken commit, and don't understand why it's not working.
+Advantages:
+1. Easier to see the changes in pull request, since feature has last develop changes.
+2. If you make some commits but not in needed branch, you can easily rebase them to needed one. 
 
+It's a usefull thing if we want to have latest changes from develop, for example, but don't want to have extraCommits
+merge commits, than we can REBASE our feature branch on TOP of development. Like we whrap of root of our branch and 
+move it on top of development branch with our commits history, that's why we need to rewrite oer commits with 
+changes in develop. So the history structure stays the, we still have 1f, 2f, 3f, commits but they are changed.
+
+feature>git rebase develop
+There two phases of rebase: 
+1. It will grab TOP of develop (2d) and try to merge it with BOTTOM (1f) of feature, when conflicts are solved - new
+1fd commit is born, insteed of old 1f.
+2. Since we have new BOTTOM of the feature branch, we need to rewrite all development in our feature, that's why
+git applying one by one commit in feature to new bottm, so after applying 1fd + 2f = 2fd.
+
+--abort - will decline rebase
+--skip - will pass current commit while rebasing
+
+To revert rebase - we need to reset hard on previous HEAD. ORIG_HEAD could work, but it can be changed, so
+solid method is to get previous HEAD of feature from reflog
+$>git reflog feature -5 (shows 5 last HEADs of feature)
+$>git reset --hard feature@{1}
+
+We can set a command for testing each rebased commit, to reduce faling of our code. 
