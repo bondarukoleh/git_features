@@ -806,7 +806,11 @@ REBASE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITHOUT EXTRA COMMIT (
 PROBLEMS in front of merge:
 1. PROHIBITED to rebase publick branches, where not only you working in. So rebase just for your local branches. 
 So you cannot rebase feature in develop, because develop - is common, and you'll rewrite his commits with your changes.
-2. When something goes wrong - and in initial commit after rebase - something broken, we have a bunch of rewritted
+2. You cannot do rebase on branches that were merged with other branches with conflicts.
+  2.1 By default rebase doesn't rewrite merge commits, simply passes them
+  2.2 rebase --preserve-merges - rewrites merge commits, but passes resolved conflicts in them, so once again,
+  changes that done, resolved conflicts in merge commits - don't go to rebased commits. Whitch brings us to problems.
+3. When something goes wrong - and in initial commit after rebase - something broken, we have a bunch of rewritted
 broken commits, and it's not trivial to revert them, even if we fix something, we still have broken commits in history
 whitch is bad thing, we can revert on broken commit, and don't understand why it's not working.
 Advantages:
@@ -842,12 +846,39 @@ $>git commit --amend --no-edit (changes current reseted commit)
 $>git rebase --continue
 
 We can rebase maded by mistace commits in different branch.
-So we where in wring branch, and make a few commits we wanted in another branch.
-wrongbranch$>git log:
-needed3
+So we checkout fix branch from feature branch, and make a few commits, and we want these commits 
+based on develop branch not on feature, we can reset fix branch on develop.
+fix$>git log:
+needed3_infix
+needed2_infix
+needed1_infix
+notNeeded2_inFeature
+notNeeded1_inFeature
+We can set from to what branch we want rebase fix branch on. So we switch to fix branch, and:
+fix$>git rebase --onto develop notNeeded2_inFeature (or feature, means starting from bottom of fix - rebase it on develop)
+
+Another situation:
+you make a few commits in develop branch - but they needed on feature, we can rebase them on feature easily
+develop$>git log:
 needed2
 needed1
 notNeeded2
 notNeeded1
-We can set from what commit we want to make rebase development. So we switch to needed branch, and:
-neededBranch$>git rebase --onto neededBranch needed1
+WRONG COMMAND - develop$>git rebase --onto feature @~2 (rebase 2 previous commits on feature, BUT with develop branch also)
+and we don't want to move develop branch
+
+Simpliest way is to cherry-pick needed commits to feature branch, and then move HEAD of develop.
+feature$>git cherry-pick develop@~2..develop (range from second previous develop TOP commit to develop TOP)
+feature$>git branch -f develop develop@~2 (recreate develop branch with TOP on two commits before)
+or
+develop$>git reset --hard @~2
+
+MERGE COMMITS TRICKS WITH REBASE
+Rebase by default passes merge commits, and using only diffs between commits and their ancestors.
+But current branch was merged withsome other branches, and in those merge commits where some major changes
+that we need? -> they will disappear. To fix that:
+feature$>git rebase develop --preserve-merges (-p)
+This won't copy all ancestors from merged branches in feature, instead it'll make copy of merge commits
+and make rebased feature without ancestors of merged branches. BUT it won't copy changes, resolved conflicts
+in these merge commits.
+So be aware that rebase shouldn't be done in branche that was merged with other branch with conflicts. 
