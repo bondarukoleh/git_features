@@ -835,3 +835,19 @@ $>git reflog feature -5 (shows 5 last HEADs of feature)
 $>git reset --hard feature@{1}
 
 We can set a command for testing each rebased commit, to reduce faling of our code. 
+$>git rebase -x "node test" develop
+If reseted commit fails the test, we need to fix it and change.
+So we make a fix, then add changes to index, then:
+$>git commit --amend --no-edit (changes current reseted commit)
+$>git rebase --continue
+
+We can rebase maded by mistace commits in different branch.
+So we where in wring branch, and make a few commits we wanted in another branch.
+wrongbranch$>git log:
+needed3
+needed2
+needed1
+notNeeded2
+notNeeded1
+We can set from what commit we want to make rebase development. So we switch to needed branch, and:
+neededBranch$>git rebase --onto neededBranch needed1
