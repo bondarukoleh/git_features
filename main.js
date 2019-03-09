@@ -11,5 +11,4 @@ function someFunctionfix(){
   console.log('fix')  
 }
 
-//some changes
-//some more changes
+//changes in feature
