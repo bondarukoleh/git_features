@@ -491,6 +491,20 @@ $>git blame -L 3,6:somefile.html
 $ git blame somefile.html --date=short -L 3,6 (with shorted date)
 
 MERGE
+We merging develop to feature.
+In feature we have commits: init, 1f, 2f.
+In develop we have commits: init, 1d, 2d. 
+feature>git merge develop
+Git will grab TOP of develop (2d) and try to merge it with TOP of feature. 
+After resolving conflicts (or not) - merge commit will be created 3mc.
+Here we are, feature merged with develop. Log will show:
+>3mc
+>2d
+>1d
+>2f
+>1f
+>init
+
 Checkout in branch you want to merge in.
 $>git checkout develop
 $>git merge featureBranch
@@ -762,3 +776,18 @@ Or you can even make it simplier with
 $ git log feature1...develop --oneline --cherry (--cherry-mark, --right-only, --no-merges in one flag)
 
 REBASE
+So as far as I get it.
+We rebasing develop to feature.
+In feature we have commits: init, 1f, 2f.
+In develop we have commits: init, 1d, 2d. 
+feature>git rebase develop
+Git will grab TOP of develop (2d) and try to merge it with 1f. 
+After resolving conflicts (or not) - 1f - is no longer 1f - it rebased with 2d - becomes 1df.
+Contiue to rebasing - git grab 2d and merge it with 2f, after resolving, 2f no more - becomes 2df.
+Here we are, feature merged with develop, and with rewrited history. Log will show
+>2df (ex 2f)
+>1df (ex 1f)
+>2d
+>1d
+>init
+
