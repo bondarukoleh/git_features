@@ -10,3 +10,5 @@ function sayBye() {
 function someFunctionfix(){
   console.log('fix')  
 }
+
+//some changes
