@@ -9,7 +9,6 @@ function sayBye() {
 
 function someFunctionfix(){
   console.log('fix')  
-<<<<<<< HEAD
 }
 
 //Chenges in develop
@@ -17,6 +16,3 @@ function someFunctionfix(){
 //changes in feature
 //more changes in feature
 // more changes
-=======
-}
->>>>>>> 553e140b0319aa9dd343276defd415849f9602ee
