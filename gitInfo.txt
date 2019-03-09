@@ -740,4 +740,25 @@ If you want to stop cherry-picking, means we don't want to create commits from f
 conflict, we can
 $>git cherry-pick --quit
 
-If we made cherry pick and realixe that we don't want it. reset hard on some commit behind.
+If we made cherry pick and realize that we don't want it. reset hard on some commit behind.
+
+When you no-conflict cherrypicing from some feature - your cherry picked commit is equivalent
+to commit from feature. There is a way to see equivalemt commits when you diff some branches
+$>git cherry develop feature -v (verbose means with commit message header)
+This shows commits from feature "-" means this commit equivalent to some feature branch
+"+" means that this commit is the sane as dome
+But in git log we have some flags to see the same thing
+$ git log feature1...develop --oneline --cherry-mark --left-right
+> 553e140 cherry-pick continue (> - right, means develop branch)
+> bbe5414 alignment
+> 6183d5d cherry pick in progress
+< 71gd5ds some feature commit (< - left, means feature branch)
+= 22dc57e some fix 
+(equal commit with 9abc78c, means cherrypicked, but truly it's doesn't matter where it is since it's equal)
+= 9abc78c (feature) some fix
+
+Or you can see commits only from prefer brench --right-only, or --left-only
+Or you can even make it simplier with
+$ git log feature1...develop --oneline --cherry (--cherry-mark, --right-only, --no-merges in one flag)
+
+REBASE
