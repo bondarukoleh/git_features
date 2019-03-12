@@ -738,10 +738,7 @@ to apply them on branch_v1. If changes did not depend on previous branch_v2 feat
 add them to develop.
 You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
 your index in branch_v1.
-<<<<<<< HEAD
 CHERRY PICK USE - GET ONE NEEDED COMMIT TO FEATURE FROM DEVELOP, and don't bring anything else from develop. 
-=======
->>>>>>> 553e140b0319aa9dd343276defd415849f9602ee
 
 Cherry pick has option to copy a few commits
 $>git cherry-pick -x 2j3h 5j56h 
