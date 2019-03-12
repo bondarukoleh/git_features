@@ -506,7 +506,8 @@ Here we are, feature merged with develop. Log will show:
 >init
 So when we make merge - we have addition merge commit, and hystory of full development in develop branch
 and feature branch. So it's simple to return on state that you like.
-MERGE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITH MERGE COMMIT and have separate history for development
+MERGE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITH MERGE COMMIT and have separate history of development
+in these two branches (not rewritted).
 
 Checkout in branch you want to merge in.
 $>git checkout develop
@@ -738,10 +739,8 @@ to apply them on branch_v1. If changes did not depend on previous branch_v2 feat
 add them to develop.
 You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
 your index in branch_v1.
-<<<<<<< HEAD
-CHERRY PICK USE - GET ONE NEEDED COMMIT TO FEATURE FROM DEVELOP, and don't bring anything else from develop. 
-=======
->>>>>>> 553e140b0319aa9dd343276defd415849f9602ee
+CHERRY PICK USE - GET ONE (or several) NEEDED COMMIT(s) TO FEATURE FROM DEVELOP, and don't bring anything
+else from develop. 
 
 Cherry pick has option to copy a few commits
 $>git cherry-pick -x 2j3h 5j56h 
@@ -864,8 +863,8 @@ needed2
 needed1
 notNeeded2
 notNeeded1
-WRONG COMMAND - develop$>git rebase --onto feature @~2 (rebase 2 previous commits on feature, BUT with develop branch also)
-and we don't want to move develop branch
+WRONG COMMAND - develop$>git rebase --onto feature @~2 
+Rebase 2 previous commits on feature, BUT with develop branch also and we don't want to move develop branch.
 
 Simpliest way is to cherry-pick needed commits to feature branch, and then move HEAD of develop.
 feature$>git cherry-pick develop@~2..develop (range from second previous develop TOP commit to develop TOP)
