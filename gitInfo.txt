@@ -885,3 +885,21 @@ So be aware that rebase shouldn't be done in branche that was merged with other 
 INTERACTIVE REBASE
 When you have some mess in your branch, and you want to make pull request but with clear nice history
 featue$> git rebase -i develop
+
+You can skip, rename, edit, change order, etc. in your history.
+
+To slice one bad commit to two commits - we need, set edit flag in interactive rebase todo file. Rebase will stop 
+on this commit. While you rebaseing, and stopped on commit you wabt to slice
+$>git reset @~ (set HEAD to previous commit, and reset all changes to working directory)
+$>git add nededFile1.js
+$>git commit -m 'first sliced'
+$>git add nededFile2.js
+$>git commit -m 'second sliced'
+$>git rebase --continue
+
+To see where you are, and what action is going to be next
+$>git rebase --edit-todo (will open interactive rebase todo file)
+
+To edit and clean current branch, we need to set interactive rebase on current branch, and give it commit on what
+we want to rebase, so it will be a few commits before
+$git rebase -i @~3
