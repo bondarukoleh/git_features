@@ -880,4 +880,8 @@ feature$>git rebase develop --preserve-merges (-p)
 This won't copy all ancestors from merged branches in feature, instead it'll make copy of merge commits
 and make rebased feature without ancestors of merged branches. BUT it won't copy changes, resolved conflicts
 in these merge commits.
-So be aware that rebase shouldn't be done in branche that was merged with other branch with conflicts. 
+So be aware that rebase shouldn't be done in branche that was merged with other branch with conflicts.
+
+INTERACTIVE REBASE
+When you have some mess in your branch, and you want to make pull request but with clear nice history
+featue$> git rebase -i develop
