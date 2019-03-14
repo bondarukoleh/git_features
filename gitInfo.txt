@@ -937,3 +937,6 @@ $>git revert ae5d4..48h49
 
 Revert - like cherry-pick but it creates not copies of given commits but oposite copies of given commits, also revert
 supports most of the cherry-pick flags. --no-commit, --quit, --abort, etc.
+
+
+// some changes to be reverted
