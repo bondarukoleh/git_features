@@ -748,7 +748,7 @@ $>git cherry-pick -x develop..feature (all commits from point where feature divi
 all commits that not in develop from feture)
 Cherry-pick will crete commits in develop one by one.
 
-We want to change something in cherry-pick, so we don't want auto-commit
+We want to chenge something in cherry-pick, so we don't want auto-commit
 $>git cherry-pick feature --no-commit (same as -n)
 
 Revert cherry-pick
@@ -937,6 +937,3 @@ $>git revert ae5d4..48h49
 
 Revert - like cherry-pick but it creates not copies of given commits but oposite copies of given commits, also revert
 supports most of the cherry-pick flags. --no-commit, --quit, --abort, etc.
-
-
-// some changes to be reverted
