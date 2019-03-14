@@ -803,9 +803,9 @@ changes, since there like one straight history of "our" (rewritted) development,
 is no longer exist - it rewritted with rebased branch.
 REBASE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITHOUT EXTRA COMMIT (but we sacrifice feature commits)
 PROBLEMS in front of merge:
-1. PROHIBITED to rebase publick branches, where not only you working in. So rebase just for your local branches. 
+1. PROHIBITED to rebase public branches, where not only you working in. So rebase just for your local branches. 
 So you cannot rebase feature in develop, because develop - is common, and you'll rewrite his commits with your changes.
-2. You cannot do rebase on branches that were merged with other branches with conflicts.
+2. You cannot do rebase branche that was merged with other branches with conflicts.
   2.1 By default rebase doesn't rewrite merge commits, simply passes them
   2.2 rebase --preserve-merges - rewrites merge commits, but passes resolved conflicts in them, so once again,
   changes that done, resolved conflicts in merge commits - don't go to rebased commits. Whitch brings us to problems.
@@ -814,7 +814,10 @@ broken commits, and it's not trivial to revert them, even if we fix something, w
 whitch is bad thing, we can revert on broken commit, and don't understand why it's not working.
 Advantages:
 1. Easier to see the changes in pull request, since feature has last develop changes.
-2. If you make some commits but not in needed branch, you can easily rebase them to needed one. 
+2. If you make some commits but not in needed branch, you can easily rebase them to needed one.
+3. If develop merge commit with feature was reverted, after feature fix - we cannot merge it with develop correct, 
+since not all changes will be count while merging, that's where we can use git rebase, first rebase feature branch
+(with --onto flag) and that merge it with develop.
 
 It's a usefull thing if we want to have latest changes from develop, for example, but don't want to have extraCommits
 merge commits, than we can REBASE our feature branch on TOP of development. Like we whrap of root of our branch and 
@@ -914,6 +917,8 @@ RERERE (Reuse recorder resolution)
 So if you were making rebase or merge, or you want to rebase previously merged branch - and you stop rebasing or merging
 to make something nore important - you will resolve conflicts once again. If you don't want to do that, rerere will help
 $>git config rerere.enabled true
+$>\some\path\to\script\rerere-train.sh --all (all conflicts from all branches)
+(we need to teach rerere how we resolved conflicts in past, needed only if rerere was disabled)
 $>git merge master (somple merge, with conflict that you resolved)
 $>git add/commit (rerere remembered resolved conflicts)
 $>git reset --hard @~
@@ -937,3 +942,26 @@ $>git revert ae5d4..48h49
 
 Revert - like cherry-pick but it creates not copies of given commits but oposite copies of given commits, also revert
 supports most of the cherry-pick flags. --no-commit, --quit, --abort, etc.
+
+We cannot simply revert merge commit, because it has to parrents, and we should explain to git what changes, of What
+parrent we should revert to oposite state.
+So if we merge a feature to develop, develop is pulled by other developers and maybe they already made some commits 
+over them. And we realise that feature has bug. We cannot siply hard reset develop to previous commit, because it 
+will mess up other developers work. But we can make a revert commit to dvelop.
+
+develop$>git revert HEAD -m 1 (means revert changes og last commit, of first parrent (means develop, since we in develop))
+this will create a revert commit, with deveted changes that was merged from feature branch.
+Be aware, that after we revert feature branch, fixed bug in feature and make a merge develop with feature again - git will
+ignore feature commits start from commit that was merged first time (with bug), because from git prospective merge with
+feature already done that time, revert creating regular commit, nothing more, so git thinks that merge done, and no need 
+to merge those changes onse more.
+There are few solutions for this situation.
+1. We can revert the revert commit :/, and make merge again with resolving conflicts, but it will make history dirty.
+this option, with revereting already done revert - is preferable when you are changing public not local branch.
+2. We can cherry-pick by our hands those commits that we need from branch, but that won't be merge anymore.
+3. We can rebase feature branch (preferable this option) and merge it to develop (but works only on local branches)
+  feature$>git rebase --onto develop commit_feature_was_created_in_develop
+4. To brake feature to develop merge connection (with bug) that bothers to make a cirrect merge feature with develop
+we can rebase feature branch on itself, meaning make a new copy but clean, without being feature one of the parrents
+of merge commit in evelop.
+  feature$>git rebase commit_where_feature_was_rebased --no-ff (means force to make commits copies)
