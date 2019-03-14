@@ -748,7 +748,7 @@ $>git cherry-pick -x develop..feature (all commits from point where feature divi
 all commits that not in develop from feture)
 Cherry-pick will crete commits in develop one by one.
 
-We want to chenge something in cherry-pick, so we don't want auto-commit
+We want to change something in cherry-pick, so we don't want auto-commit
 $>git cherry-pick feature --no-commit (same as -n)
 
 Revert cherry-pick
@@ -928,3 +928,12 @@ rerere will also apply resolved conflicts for rebase.
 
 All information about rerere stored in .git/rr-cache. We can make rerere to forget about everything just by
 removing this directory.
+
+REVERT
+We can change to oposite any commit, or range of commits. Revert changes in them. For example, in last commit we added
+function "a" in uor project, with revert we will create another commit, but with oposite changes, mean we will
+delete function "a" from project. If there will be some troubles - just resolve conflicts in common maner.
+$>git revert ae5d4..48h49
+
+Revert - like cherry-pick but it creates not copies of given commits but oposite copies of given commits, also revert
+supports most of the cherry-pick flags. --no-commit, --quit, --abort, etc.
