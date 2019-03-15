@@ -951,17 +951,43 @@ will mess up other developers work. But we can make a revert commit to dvelop.
 
 develop$>git revert HEAD -m 1 (means revert changes og last commit, of first parrent (means develop, since we in develop))
 this will create a revert commit, with deveted changes that was merged from feature branch.
-Be aware, that after we revert feature branch, fixed bug in feature and make a merge develop with feature again - git will
-ignore feature commits start from commit that was merged first time (with bug), because from git prospective merge with
-feature already done that time, revert creating regular commit, nothing more, so git thinks that merge done, and no need 
-to merge those changes onse more.
+
+Be aware, that after we revert merge commit with feature branch, fixed bug in feature and make a merge feature with develop
+again - git will ignore feature commits start from commit that was merged first time (with bug), because from git prospective
+merge with feature already done that time, revert creates regular commit, nothing more, so git thinks that merge has done,
+and no need to merge those changes onse more.
 There are few solutions for this situation.
 1. We can revert the revert commit :/, and make merge again with resolving conflicts, but it will make history dirty.
 this option, with revereting already done revert - is preferable when you are changing public not local branch.
 2. We can cherry-pick by our hands those commits that we need from branch, but that won't be merge anymore.
-3. We can rebase feature branch (preferable this option) and merge it to develop (but works only on local branches)
-  feature$>git rebase --onto develop commit_feature_was_created_in_develop
-4. To brake feature to develop merge connection (with bug) that bothers to make a cirrect merge feature with develop
+3. We can rebase feature branch and merge it to develop (but works only on local branches)
+  feature$>git rebase --onto develop commit_feature_was_created_from_develop
+4. To brake feature-to-develop merge connection (with bug) that bothers correct merge feature with develop
 we can rebase feature branch on itself, meaning make a new copy but clean, without being feature one of the parrents
-of merge commit in evelop.
-  feature$>git rebase commit_where_feature_was_rebased --no-ff (means force to make commits copies)
+of "feature-develop(with bug) merge commit" in develop.
+  feature$>git rebase commit_where_feature_was_created --no-ff (means force to make commits copies)
+  develop$>git merge feature
+
+DATE set/layout
+We can log data before some time. Be aware git grabs currents data and time as count point from.
+$>git log --pretty='%ci | %s' --after='2019-02-15' --before='2019-02-17'
+$>git log --pretty='%ci | %s' --after='2019-02-15 10:00' --before='2019-02-15 15:00'
+$>git log --pretty='%ci | %s' --after='1 day'/'1 day ago'/1.day.ago/'1 week'/2.month/3.year/30.minutes/5.seconds
+$>git log --pretty='%ci | %s' --before='yesterday 15:00'/'tea'(17:00)/'noon'(12:00)/'midnight'(00:00)
+$>git log --pretty='%ci | %s' --after='last friday' (shows all commits from fiday)
+
+For setting time of expiring reflog (for example) git have never(01.01.1970) and now
+$>git config --global gc.reflogExpire=never (or $>git reflog expire --expire=never ('now' - to delete) --all)
+(sets that we need to delete reflogs rows before 01.01.1970, but we don't have such)
+
+Layout
+We can configure date layout in log
+$>git log --date=iso (2019-03-14 16:07:48 +0000)
+$>git log --date=iso-strict (2019-03-14T16:07:48+00:00)
+$>git log --date=rfc (Thu, 14 Mar 2019 16:07:48 +0000)
+$>git log --date=unix (1552579668)
+$>git log --date=short (2019-03-14)
+$>git log --date=relative (23 hours ago/8 days ago)
+$>git log --date=format:'%F %T'
+(2019-03-14 16:07:48 it's a strftime format, http://man7.org/linux/man-pages/man3/strftime.3.html)
+$>git log --date=format-local:'%F %T' (means don't show +0000 timezone, but it's by default as I get)
