@@ -1,0 +1,25 @@
+BRANCH HISTORY
+to see in one line
+$>git log --oneline
+
+you can pass a commit or branch
+$>git log 32fj/featureMranch
+
+see datailed commit info, by default - it will be HEAD, but we can pass a commit
+$>git show /featureBranch/234fjs
+
+tilda - to see one commit behind, --quiet - to see only general info
+$>git show HEAD~ --quiet (or you can pass a count of titldes HEAD~3)
+
+A shourtcut for HEAD is at sighn
+$>git show @~2 (Windows - "@~")
+
+To see whole file from commit before
+$>git show @~:fileToshow
+
+If you index some file and change something and want to see index version of file
+$>git show :fileToshow
+
+If you want to see the commit but remember ony commit message - you can run.
+It takes a lates commit wih these words. Branch is not counting.
+$>git show :/'some Words From Commit'

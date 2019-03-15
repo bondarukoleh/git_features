@@ -1,0 +1,24 @@
+There are 3 major states in git
+Working directory - where your unindex changes are
+Index - where your changes added to index
+Repository - commited changes to repository.
+
+WORKING WITH FILES
+#To update file in index avoid OS
+$>git update-index --chmod=+x <file>
+
+#Or if file isn't in index yet
+$>git add --chmod=+x <file>
+
+#to add file avoid .gitignore (force)
+$>git add -f .idea/../someNeededFile
+
+#to rename
+$>git mv file1 file2
+
+CLEAN
+For deleting not tracked files and directories. If you have some generated stuff or downloaded
+- it will help you.
+$>git clean -dxf (d - for directories) (x - for files even in gitignore) (f - to make it work)
+
+So for cleanup whole project we need to reset hard on HEAD, and make clean -dxf

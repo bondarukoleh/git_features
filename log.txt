@@ -1,0 +1,113 @@
+LOG
+Shows commits reachable from HEAD
+
+$>git log
+By default it runs with flag --pretty=medium (commitID, author, date, commit message)
+$>git log --pretty=oneline (gives us commitID and message) --abbrec-commit (to make commitID short) 
+same as 
+$>git log --oneline
+
+log is very customizable. i.e.
+$>git log --pretty=format:'%h %cd | %s%d [%an]'
+Show us custom log info where:
+%h - short commitID
+%cd - date
+%s - commit message first line
+%d - decorator string, pointing HEAD, branch etc.
+[%an] - author in brackets
+We can find all flags in git help log
+
+Also we can edit collors. We can check them in git help config.
+normal, black, red, green, yellow, blue, magenta, cyan and white
+bold, dim, ul, blink, reverse, italic, and strike
+$>git log --pretty=format:'%C(yellow)%h %C(red)%cd | %C(green)%s%d %C(dim green)[%an]'
+
+See git log with changes.
+$>git log --patch (-p)
+
+$>git log master
+Show commits from master
+
+$>git log master develop --graph ($>git log --all --graph) 
+Show branches commits lite tree, graph
+
+$>git log feature ^master
+same $>git log master..feature
+or if you are in one of needed branch
+master$>git log HEAD..feature (same as git log ..feature)
+Show commits done after branching from master.
+So it show feature commits unreachable from master
+
+oposite:
+master$>git log feature..
+Shows master commits that isn't reachable from feature branch. cool.
+
+$>git log master...feature --boundary --graph
+... - commits reachable from master and feature, but not for both branches same time.
+- boundary - will show the commit where branches where divided.
+
+$>git log myFile.js (git log -p myFile.js - with changes made in that file,
+--follow - if the file was changed, git findes changes for changed file also)
+Shows commits where this file was changed.
+
+If you wanted to see differentse between file in branches
+$>git log feature..master myFile.js
+
+Search for commits by message
+$>git log --grep 'word from message'
+$>git log --grep 'word from message' featureBranch (in some branch)
+$>git log --grep 'thisWord|orThisWord' -P -i (Perl friendly reqexp, ignore case)
+
+You want to find all commits where some function was added.
+$>git log -GfunctionNameRegexp -p (p - show changes)
+
+More important and pwerfull search - it's you wand to find all changes that was made
+in some function. You need to add -L flag and set a regexp to start search from
+and regexp where to end. Also it's usefull to set the file you want to search in.
+$>git log -L 3,6:somefile.html (set the lines of the file)
+$>git log -L '/<head>/','/<\/head>/':somefile.html
+
+Even more effective type of searching
+$>git log -L :fynctionNane:file.js
+git will try to find function with name and he will think that all of the code before 
+next function - is belong to found function.
+So it will grab commits even if the space beetwen functions is affected.
+But still - it's very effective.
+BUT it works only with function declaration. So it better to find:
+$>git log -L '/^functionName\(/','/^}/':somefile.js
+
+Search by author name or email, or committer
+$>git log --author=Oleh (--author=9000@gmail.com)
+$>git log --committer=someoneWhoMadeACommit
+
+By time:
+git log --after '2019-03-01' --before '2019-03-02'
+
+BLAME
+Show the committer of lines in file.
+$>git blame -L 3,6:somefile.html
+$ git blame somefile.html --date=short -L 3,6 (with shorted date)
+
+DATE set/layout
+We can log data before some time. Be aware git grabs currents data and time as count point from.
+$>git log --pretty='%ci | %s' --after='2019-02-15' --before='2019-02-17'
+$>git log --pretty='%ci | %s' --after='2019-02-15 10:00' --before='2019-02-15 15:00'
+$>git log --pretty='%ci | %s' --after='1 day'/'1 day ago'/1.day.ago/'1 week'/2.month/3.year/30.minutes/5.seconds
+$>git log --pretty='%ci | %s' --before='yesterday 15:00'/'tea'(17:00)/'noon'(12:00)/'midnight'(00:00)
+$>git log --pretty='%ci | %s' --after='last friday' (shows all commits from fiday)
+
+For setting time of expiring reflog (for example) git have never(01.01.1970) and now
+$>git config --global gc.reflogExpire=never (or $>git reflog expire --expire=never ('now' - to delete) --all)
+(sets that we need to delete reflogs rows before 01.01.1970, but we don't have such)
+
+Layout
+We can configure date layout in log
+$>git log --date=iso (2019-03-14 16:07:48 +0000)
+$>git log --date=iso-strict (2019-03-14T16:07:48+00:00)
+$>git log --date=rfc (Thu, 14 Mar 2019 16:07:48 +0000)
+$>git log --date=unix (1552579668)
+$>git log --date=short (2019-03-14)
+$>git log --date=relative (23 hours ago/8 days ago)
+$>git log --date=format:'%F %T'
+(2019-03-14 16:07:48 it's a strftime format, http://man7.org/linux/man-pages/man3/strftime.3.html)
+$>git log --date=format-local:'%F %T' (means don't show +0000 timezone, but it's by default as I get)

@@ -1,0 +1,31 @@
+REFLOG
+Git logs every movement. You can checkout every change HEAD link for example. All logs are in .git/logs/
+to see logs for HEAD
+$>cat .git/logs/HEAD
+But there is a special command
+$>git reflog (by default will show for HEAD, but we cat pass an argument)
+$>git reflog develop
+But if you've delete branch - here won't be any info about deleted branch (it will be here .git/logs/HEAD)
+
+So to restore branch on some commit you cat
+$>git checkout -b lostBranch "HEAD@{5}" (quotes for shell, {number} - it's a count of commit in logs)
+
+reflog - it's an alias got log. So many log flags - is suitable here
+$>git reflog (same as git log --online -g)
+$>git reflog --date=iso (with date)
+
+fast checkout on previus branch via reflog, but be aware that branch should existing
+$>git checkout @{-1} (1 checkout back, {-2} - two);
+or even more shorter
+$>git checkout - (but in UNIX as far as I get)
+
+Involve garbadge collector. Amount of days unreachable commits are storing is settet in settings.
+$>git gc
+
+Show unreachable objects
+$>git fsck --unreachable
+
+While TOP of any branch is existing - exists all their parents, and we can restore deleted information.
+If you need to clear branch from fat files, or clean commits from that files you have
+git filter-branch, or third-party BFG, it can help to filter commits, of make them unreachable, so 
+garbadge collector will delete them.

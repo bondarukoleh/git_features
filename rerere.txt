@@ -1,0 +1,20 @@
+RERERE (Reuse recorder resolution)
+So if you were making rebase or merge, or you want to rebase previously merged branch - and you stop rebasing or merging
+to make something nore important - you will resolve conflicts once again. If you don't want to do that, rerere will help
+$>git config rerere.enabled true
+$>\some\path\to\script\rerere-train.sh --all (all conflicts from all branches)
+(we need to teach rerere how we resolved conflicts in past, needed only if rerere was disabled)
+$>git merge master (somple merge, with conflict that you resolved)
+$>git add/commit (rerere remembered resolved conflicts)
+$>git reset --hard @~
+$>git merge master (without conflict)
+
+To make rerere deleted remembered changes
+$>git checkout --merge fileWithReolvedConflicts.js
+$>git rerere forget fileWithReolvedConflicts.js
+resolve conflict in new vay
+$>git add/commit (rerere remembered resolved conflicts by new vay)
+rerere will also apply resolved conflicts for rebase.
+
+All information about rerere stored in .git/rr-cache. We can make rerere to forget about everything just by
+removing this directory.

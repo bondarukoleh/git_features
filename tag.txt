@@ -1,0 +1,32 @@
+TAG
+Simple tags:
+We can mark a commit with a tag. It's simple marker of commit, nothing more, cool thing about tag - is
+that it's not moving anywhere. It's like a fact.  
+$>git tag release_0.0.1 release_commit
+
+And we can create a branch using tag (link to some commit)
+$>git checkout -b fix_release_0.0.1 release_0.0.1
+delete tag
+$> git tag -d release_0.0.1
+
+Tags has a lot of filter flags.
+Tags with annotation, different from simple - contain information message, date, author.
+#>git tag -a some_info_tag 463hki (or git tag -a -m 'It is a short message about this tag'
+some_info_tag 463hki)
+
+to check the message, we can
+$>git show some_info_tag
+
+With git describe - we cat check the nearest tag of the commit.
+$>git describe release_commit (will show release_0.0.1 tag)
+
+$>git describe HEAD
+info_tag-2-g461dc07 (says that nearest tag is info_tag, we are 2 commit ahead of it,
+and commit where we are)
+
+With git archive we cat do archive from some commit. And also we can use tag here.
+$>git archive some_info_tag
+$>git archive -o ./temp/info_tag-2-g461dc07.zip some_info_tag (-o where to make an archive)
+
+to unzip
+$>unzip ./temp/info_tag-2-g461dc07.zip

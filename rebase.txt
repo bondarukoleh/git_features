@@ -1,0 +1,151 @@
+REBASE
+So as far as I get it.
+We rebasing develop to feature.
+In feature we have commits: init, 1f, 2f.
+In develop we have commits: init, 1d, 2d. 
+feature>git rebase develop
+Git will grab TOP of develop (2d) and try to merge it with 1f. 
+After resolving conflicts (or not) - 1f - is no longer 1f - it rebased with 2d - becomes 1fd.
+Contiue to rebasing - git grab 2d and merge it with 2f, after resolving, 2f no more - becomes 2fd.
+Here we are, feature merged with develop, and with rewrited history. Log will show
+>2fd (ex 2f)
+>1fd (ex 1f)
+>2d
+>1d
+>init
+When we make rebase - we rewriting our history of development depending on changes from rebasing branch.
+So we will have cleaner history without additional merge commits, but it will be more coplicated to revert
+changes, since there like one straight history of "our" (rewritted) development, so our original development
+is no longer exist - it rewritted with rebased branch.
+REBASE USE - BRING LATEST CHANGES FROM DEVELOP TO FEATURE WITHOUT EXTRA COMMIT (but we sacrifice feature commits)
+PROBLEMS in front of merge:
+1. PROHIBITED to rebase public branches, where not only you working in. So rebase just for your local branches. 
+So you cannot rebase feature in develop, because develop - is common, and you'll rewrite his commits with your changes.
+2. You cannot do rebase branche that was merged with other branches with conflicts.
+  2.1 By default rebase doesn't rewrite merge commits, simply passes them
+  2.2 rebase --preserve-merges - rewrites merge commits, but passes resolved conflicts in them, so once again,
+  changes that done, resolved conflicts in merge commits - don't go to rebased commits. Whitch brings us to problems.
+3. When something goes wrong - and in initial commit after rebase - something broken, we have a bunch of rewritted
+broken commits, and it's not trivial to revert them, even if we fix something, we still have broken commits in history
+whitch is bad thing, we can revert on broken commit, and don't understand why it's not working.
+Advantages:
+1. Easier to see the changes in pull request, since feature has last develop changes.
+2. If you make some commits but not in needed branch, you can easily rebase them to needed one.
+3. If develop merge commit with feature was reverted, after feature fix - we cannot merge it with develop correct, 
+since not all changes will be count while merging, that's where we can use git rebase, first rebase feature branch
+(with --onto flag) and that merge it with develop.
+
+It's a usefull thing if we want to have latest changes from develop, for example, but don't want to have extraCommits
+merge commits, than we can REBASE our feature branch on TOP of development. Like we whrap of root of our branch and 
+move it on top of development branch with our commits history, that's why we need to rewrite oer commits with 
+changes in develop. So the history structure stays the, we still have 1f, 2f, 3f, commits but they are changed.
+
+feature>git rebase develop
+There two phases of rebase: 
+1. It will grab TOP of develop (2d) and try to merge it with BOTTOM (1f) of feature, when conflicts are solved - new
+1fd commit is born, insteed of old 1f.
+2. Since we have new BOTTOM of the feature branch, we need to rewrite all development in our feature, that's why
+git applying one by one commit in feature to new bottm, so after applying 1fd + 2f = 2fd.
+
+--abort - will decline rebase
+--quit - stop cherry picking
+--skip - will pass current commit while rebasing
+
+To revert rebase - we need to reset hard on previous HEAD. ORIG_HEAD could work, but it can be changed, so
+solid method is to get previous HEAD of feature from reflog
+$>git reflog feature -5 (shows 5 last HEADs of feature)
+$>git reset --hard feature@{1}
+
+We can set a command for testing each rebased commit, to reduce faling of our code. 
+$>git rebase -x "node test" develop
+If reseted commit fails the test, we need to fix it and change.
+So we make a fix, then add changes to index, then:
+$>git commit --amend --no-edit (changes current reseted commit)
+$>git rebase --continue
+
+We can rebase maded by mistace commits in different branch.
+So we checkout fix branch from feature branch, and make a few commits, and we want these commits 
+based on develop branch not on feature, we can reset fix branch on develop.
+fix$>git log:
+needed3_infix
+needed2_infix
+needed1_infix
+notNeeded2_inFeature
+notNeeded1_inFeature
+We can set from to what branch we want rebase fix branch on. So we switch to fix branch, and:
+fix$>git rebase --onto develop notNeeded2_inFeature (or feature, means starting from bottom of fix - rebase it on develop)
+
+Another situation:
+you make a few commits in develop branch - but they needed on feature, we can rebase them on feature easily
+develop$>git log:
+needed2
+needed1
+notNeeded2
+notNeeded1
+WRONG COMMAND - develop$>git rebase --onto feature @~2 
+Rebase 2 previous commits on feature, BUT with develop branch also and we don't want to move develop branch.
+
+Simpliest way is to cherry-pick needed commits to feature branch, and then move HEAD of develop.
+feature$>git cherry-pick develop@~2..develop (range from second previous develop TOP commit to develop TOP)
+feature$>git branch -f develop develop@~2 (recreate develop branch with TOP on two commits before)
+or
+develop$>git reset --hard @~2
+
+MERGE COMMITS TRICKS WITH REBASE
+Rebase by default passes merge commits, and using only diffs between commits and their ancestors.
+But current branch was merged withsome other branches, and in those merge commits where some major changes
+that we need? -> they will disappear. To fix that:
+feature$>git rebase develop --preserve-merges (-p)
+This won't copy all ancestors from merged branches in feature, instead it'll make copy of merge commits
+and make rebased feature without ancestors of merged branches. BUT it won't copy changes, resolved conflicts
+in these merge commits.
+So be aware that rebase shouldn't be done in branche that was merged with other branch with conflicts.
+
+INTERACTIVE REBASE
+When you have some mess in your branch, and you want to make pull request but with clear nice history
+featue$> git rebase -i develop
+
+You can skip, rename, edit, change order, etc. in your history.
+
+To slice one bad commit to two commits - we need, set edit flag in interactive rebase todo file. Rebase will stop 
+on this commit. While you rebaseing, and stopped on commit you wabt to slice
+$>git reset @~ (set HEAD to previous commit, and reset all changes to working directory)
+$>git add nededFile1.js
+$>git commit -m 'first sliced'
+$>git add nededFile2.js
+$>git commit -m 'second sliced'
+$>git rebase --continue
+
+To see where you are, and what action is going to be next
+$>git rebase --edit-todo (will open interactive rebase todo file)
+
+To edit and clean current branch, we need to set interactive rebase on current branch, and give it commit on what
+we want to rebase, so it will be a few commits before
+$git rebase -i @~3
+
+You cam change (make a patch) some commit in branch, to make it more easier to
+change for further interactive rebase.
+$>git commit -a --fixup=3b42i (or git commit --squosh=343n3i, will do squash while you rebase it)
+this will make a new commit but with fixup mark in commit message (so we could do it by ourselfs)
+Then, when we do interactive rebase, it will merge this two commits in one, and fix it.
+
+RERERE (Reuse recorder resolution)
+So if you were making rebase or merge, or you want to rebase previously merged branch - and you stop rebasing or merging
+to make something nore important - you will resolve conflicts once again. If you don't want to do that, rerere will help
+$>git config rerere.enabled true
+$>\some\path\to\script\rerere-train.sh --all (all conflicts from all branches)
+(we need to teach rerere how we resolved conflicts in past, needed only if rerere was disabled)
+$>git merge master (somple merge, with conflict that you resolved)
+$>git add/commit (rerere remembered resolved conflicts)
+$>git reset --hard @~
+$>git merge master (without conflict)
+
+To make rerere deleted remembered changes
+$>git checkout --merge fileWithReolvedConflicts.js
+$>git rerere forget fileWithReolvedConflicts.js
+resolve conflict in new vay
+$>git add/commit (rerere remembered resolved conflicts by new vay)
+rerere will also apply resolved conflicts for rebase.
+
+All information about rerere stored in .git/rr-cache. We can make rerere to forget about everything just by
+removing this directory.
