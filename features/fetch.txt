@@ -1,0 +1,15 @@
+FETCH
+
+Fetching a branch - it's getting last branch state from remote repository.
+It only downloads new data from a remote repository - but it doesn't integrate any of this new data into
+your working copy of remote branch. Fetch will never manipulate, destroy, or screw up anything.
+This means you can never fetch often enough.
+
+As far as I get - fetch downloads repository/branch in some remote folder, and dont mess with your local changes of
+this branch. What you'll do with it - it's up to you.
+
+Means that if you've pulled feature branch, made a commit, and someone has committed in feature after that,
+you can fetch branch, and TOP of feature branch will be on last guy commit, but HEAD will be on your commit.
+So you can either merge your changes with new TOP, or just check it out.
+
+feature$>git pull origin = git fetch origin + git merge origin/feature
