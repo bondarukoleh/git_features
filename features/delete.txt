@@ -1,0 +1,9 @@
+DELETE
+Difference between -d and -D - is
+-d needed when you've already megre featureBranch with develop - and you don't want it since since 
+TOP of feature branch is now in develop.
+But if featureBranch - is not merged yet, and it's a risky operation - git won't let you to do it. 
+Because commits from deleted branch - will be unreachable. But if you still want to do it -D.
+If you want to revert deletion - in short time it's posible, you can recreate a branch with HEAD
+pointing on that commit that you want from deleted branch
+$>git checkout -b featureBranch 123d

@@ -1,0 +1,55 @@
+DIFF
+$>git diff 3jo3i 64ml5 (or develop feature, or develop..feature)
+It will show diff blocks, hangs, that will show difference between two branches:
+diff --git a/gitInfo.txt b/gitInfo.txt (showing that develop branch is - a, and feature is b)
+index 56cb5e6..779c279 100644 (hash sum of gitInfo.txt in develop is 56cb5e6, in feature - 779c279,
+   100644 - file type, 100 - regular file, 644 - not executable);
+--- a/gitInfo.txt (name file, if it's not deleted, renamed, or changed somehow)
++++ b/gitInfo.txt
+@@ -1,56 +1,44 @@ hang headre(sometimes it's here) (If in develop you'll change, as it shows in termminal,
+from 1st row, 56th rows - you'll get file that you've got in feature and it will be from 1st row till 44th row.)
+
+$>git diff develop...feature
+Will compare what was changed in feature from commit that it was branched from develop.
+Means it will compare commit where feature was born with TOP of feature.
+
+$>git diff fk4g (HEAD for example)
+Will show difference between current working directory changes wih commit.
+git diff - defferent with git diff HEAD, without argument - it will show diff with cyrrent index, not commit.
+Be aware that these types of commands - ignore untracked files.
+
+$>git diff --cached/--staged HEAD
+Show difference beetwen index and HEAD. Useful to see what we will commit after we add changes in index.
+
+$>git diff (nothing - to compare with index, HEAD to compare with head) file.js
+$> git diff develop feature file.js (you can add a few files here to save time)
+Show changes of some particular file, depending on what you want to see.
+
+$>git diff --name-only e24412
+show only files that changed, after that you can look more detailed for file you're interested in.
+
+$>git diff master:file1.js develop:file2.js
+compare two different files from two different commits.
+
+$>git diff --no-index file1.js file2.js
+compare any two files on machine, no matter what it is, and in our repository or not.
+
+$>git diff --word-diff (--color-words - will show only words without brackets stuff)
+compare sentenses, with comfortable, clear difference.
+
+Also you can exend local git config .git/config - with new diff features. i.e. add markdown
+hendler (driver) in diff.
+[diff "markdown"]
+        # POSIX extended
+        xfuncname = "^#+[[:space:]]+.+$" (it's for deff header, just a tip to diff be more readable)
+        wordRegex = "\\*+|[^[:space:]*]+" (for word, how git will understand that this is a word)
+and now you can add a *.md diff=markdown in your .gitattributes.
+
+Also you can setup diff for images, and other non text files. 
+For that you can use non-git utilites, and set them to config file
+[diff "myOwnDiffTool"]
+      command = sh -c 'icdiff "$1" "$4"'
+and in gitattributes *.png diff = myOwnDiffTool
+Means, that when I will call diff on png file, git will pass arguments (path to diff files,
+commits, hashsum and others) to icdiff tool, but we want to have only pathes to files, thats
+why we pass to icdiff first and forth arguments.

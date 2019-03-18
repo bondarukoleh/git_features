@@ -1,0 +1,43 @@
+WORKING WITH COMMIT
+#To see the commit
+$>git show <commitID>
+#Current commit
+$>git show --pretty=fuller
+
+#To set athor of commit. You will be commiter but code author - can be some one else
+$>git commit --author='John Snow <johnSnow@gmail.com>' --date='...' 
+
+#to discard changes from index
+$>git reset HEAD .idea
+
+#to add some code from file
+$>git add -p <file>
+
+#To commit with add, BUT This won't work with untracked (not in index) files.  
+$>git commit -am 'message'
+
+#Commit specific file, file, directories.
+$>git commit -m 'message' <file/files/dir>
+
+$>git commit -v (verbose)
+Will add in commit message difference between indexed changes that we going to commit
+and HEAD of branch, it will add diff under cizors part - so it won't appear in commit
+message, it's ust for you, to better understand what you will commit. 
+
+AMEND
+This is special for changing latest commit. it's the same thing that we done before.
+$>git commit --amend --reset-author --no-edit (to not involde a text redactor for changing the message)
+same as:
+$>git reset --soft ORIG_HEAD
+$>git commit -C ORIG_HEAD --reset-author
+
+So it's just softly reset HEAD to previous commit, than commits all changes from index.
+But soft reset is more powerfull, it gives you ability to make with branch what ever you want.
+For example you have done 1,2,3 commits, and want to make them 1.
+$>git reset --soft 0commit
+Your HEAD on state where you didn't do anything, but all changes from 1,2,3 commits are in index now.
+You make a new commit
+$>git commit 4
+HEAD is on 4th commit where all your changes is commited. Here you're are, one commit from 1,2,3
+But be aware, it will help to change only last commit. You can not change 2nd, 3rd commit, only last nothing more.
+It's up to rewriting git history - and for that purpose - rebase is.

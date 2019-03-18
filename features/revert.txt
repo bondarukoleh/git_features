@@ -1,0 +1,33 @@
+REVERT
+We can change to oposite any commit, or range of commits. Revert changes in them. For example, in last commit we added
+function "a" in uor project, with revert we will create another commit, but with oposite changes, mean we will
+delete function "a" from project. If there will be some troubles - just resolve conflicts in common maner.
+$>git revert ae5d4..48h49
+
+Revert - like cherry-pick but it creates not copies of given commits but oposite copies of given commits, also revert
+supports most of the cherry-pick flags. --no-commit, --quit, --abort, etc.
+
+We cannot simply revert merge commit, because it has to parrents, and we should explain to git what changes, of What
+parrent we should revert to oposite state.
+So if we merge a feature to develop, develop is pulled by other developers and maybe they already made some commits 
+over them. And we realise that feature has bug. We cannot siply hard reset develop to previous commit, because it 
+will mess up other developers work. But we can make a revert commit to dvelop.
+
+develop$>git revert HEAD -m 1 (means revert changes og last commit, of first parrent (means develop, since we in develop))
+this will create a revert commit, with deveted changes that was merged from feature branch.
+
+Be aware, that after we revert merge commit with feature branch, fixed bug in feature and make a merge feature with develop
+again - git will ignore feature commits start from commit that was merged first time (with bug), because from git prospective
+merge with feature already done that time, revert creates regular commit, nothing more, so git thinks that merge has done,
+and no need to merge those changes onse more.
+There are few solutions for this situation.
+1. We can revert the revert commit :/, and make merge again with resolving conflicts, but it will make history dirty.
+this option, with revereting already done revert - is preferable when you are changing public not local branch.
+2. We can cherry-pick by our hands those commits that we need from branch, but that won't be merge anymore.
+3. We can rebase feature branch and merge it to develop (but works only on local branches)
+  feature$>git rebase --onto develop commit_feature_was_created_from_develop
+4. To brake feature-to-develop merge connection (with bug) that bothers correct merge feature with develop
+we can rebase feature branch on itself, meaning make a new copy but clean, without being feature one of the parrents
+of "feature-develop(with bug) merge commit" in develop.
+  feature$>git rebase commit_where_feature_was_created --no-ff (means force to make commits copies)
+  develop$>git merge feature

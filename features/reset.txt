@@ -1,0 +1,95 @@
+RESET
+--HARD
+To revert branch TOP to some commit we can use reset.
+Simpliest way to do it:
+$>git reset --hard sdj23 (previous commit) same as
+$>git reset --hard @~ (@ - HEAD, ~ - previous commit)
+
+This will make latest TOP of the branch - unreachable from branch.
+It will be deleted with time. reset will delete working directory and index changes,
+and set HEAD and TOP to previous commit.
+
+To undo reset we can reset once more but to latest TOP.
+$>git reset --hard 34s3d (latest commit)
+If we forgot commit id - we can find it in reflog
+$>git reflog master
+Or there is another way, git before reseting branch HEAD - logs commit to .git/ORIG_HEAD, so
+$>git reset --hard ORIG_HEAD
+
+--SOFT
+$>git reset --soft @~
+Will move HEAD to previous commit, and it will compute delta between latest and previous commit
+and put it in index. So all changes that made in latests commit will now be in index.
+Basicaly it behaves like a hard but keeps changes in index.
+
+To revert reset we can do same as with hard.
+$>git reset --soft ORIG_HEAD
+
+So we softly reset to previous commit and make some changes. We should add files that changed in index
+and make a new commit. We fix our errors in latest commit, and want to use a commit message from latest
+to not type it once more.
+$>git commit -c ORIG_HEAD (-c - we can change commit message from latest, -C - it will grap message as it is.)
+Keep in mind that -c/-C - takes not only message but author also and most important date of latest commit.
+And git log/show shows that commits are identical witch can confuse you.
+To get a full information about commit use:
+$>git log --pretty-fuller
+
+If you want only commit message:
+$>git commit -C ORIG_HEAD --reset-author
+
+AMEND
+This is special for changing latest commit. it's the same thing that we done before.
+$>git commit --amend --reset-author --no-edit (to not involde a text redactor for changing the message)
+same as:
+$>git reset --soft ORIG_HEAD
+$>git commit -C ORIG_HEAD --reset-author
+
+So it's just softly reset HEAD to previous commit, than commits all changes from index.
+But soft reset is more powerfull, it gives you ability to make with branch what ever you want.
+For example you have done 1,2,3 commits, and want to make them 1.
+$>git reset --soft 0commit
+Your HEAD on state where you didn't do anything, but all changes from 1,2,3 commits are in index now.
+You make a new commit
+$>git commit 4
+HEAD is on 4th commit where all your changes is commited. Here you're are, one commit from 1,2,3
+But be aware, it will help to change only last commit. You can not change 2nd, 3rd commit, only last nothing more.
+It's up to rewriting git history - and for that purpose - rebase is.
+
+--MIXED
+(it's a default flag of reset command, so you may not type it)
+This reset revert repository and index, but delta between latest commit and previous now lives in 
+working directory, so it's same as soft but changes now not in index but in working directory.
+
+Also it's a usefull thing to clear index file.
+$>git reset HEAD (same as $>git reset --mixed HEAD or even $> git reset (if no commit passed - then it's HEAD));
+Reset as we know should revert repository and index to some commit and put changes in working directory.
+But since we tell reset on HEAD that means revert repository and index to latest commit - witch
+means remove all changes from index.
+Also we can tell what file should be removed from index
+$>git reset ./someFile.js
+$>git reset 23h5 ./someFile.js (reset file in index to some commit)
+if you want these changes not only in index - checkout
+$>git checkout 23h5 ./someFile.js
+
+--KEEP
+Will revert to some commit, but changes that now in working directory it will try to keep.
+Be carefull, if file was changed between commits - it will revert it, without save.
+So it mostly like --hard but with keeping changes that possible in working directory.
+If it sees that it cannot revert some files without conflicts - it won't do it. 
+So as far as I get - if you wand to reset a file, but keep your changes in working directory - 
+that's your choise.
+One more feature - it's make reset --keep without arguments, means to current HEAD.
+It will remove all changes from index, but keep all changes that in this moment in working directory,
+useful when you merge something.
+$>git reset help - will show also a table what reset will do in different situations.
+
+--MERGE
+Aimed on reseting erroneous merge.
+Reseting repository and index, keeps changes in working directory if it can.
+If changes for some file in index - and we reseting on one commit back - chnges will be
+deleted from index and from working directory. But if no changes in index - changes for
+file - will be saved in working directory.
+Most frequent usage - without any argument
+$>git reset --merge
+It will delete all changes in index, for rest files - changes will be in working directory.
+Can be usefull in merge process.

@@ -1,0 +1,84 @@
+BRANCH
+#Chery pick - to get some commit from branch and merge it with other branch 
+
+#branch - it's just a link to some commit. You can check it in .git/refs/heads/
+# git branch -v shows the commit on what commit branch is looking
+
+#.git/refs/HEAD - current branch
+
+After you done a commit - it contains information about previous commits on the base of it was created,
+and HEAD link points on last commit. Last commit in branch - called TOP of the branch.
+So important thing - 
+TOP - is the last commit in branch, branch is pointing on that commit.
+HEAD - is where you are, and in most cases - HEAD is pointing on the last commit in branch - so 
+it's automatically pointing on TOP of hte branch. But if you set the HEAD to point to some other commit -
+HEAD won't be pointing on the TOP of the branch.
+
+Commits that lead to the state of current branch - belongs to branch.
+For example in maser we have 3 commits, than we checkout to feature and 
+made 2 commits more. all 5 commits belongs to feature branch, since thay lead
+to it state, and 3 commits belongs to master branch.
+
+#will delete all uncommitted changes
+$>git checkout -f branch 
+
+#will checkout on commit that HEAD refers, means return the branch in latest commit's state
+#Even that was added to index
+$>git co -f HEAD (or git co -f, if the branch isn't set - will grab current branch HEAD)
+
+#stashes all changes
+$>git stash
+
+#apply changes on current branch (no matter that you stashed changes in other branch)
+$>git stash pop
+
+Checkout will be forbidden only if git should replace some changes from branchA in branchB,
+if co could be done without any changes - it will be done.
+Also If you on develop and realise that changes should have separate branch -
+it's not a problem to create separate branch by git co -b newBranch.
+TOP of develop branch and HEAD of newBranch is pointing on the same commit - so the branches are same,
+but you have now all changes in newBranch, and you can easily continue.
+
+Situation. You've done a 2b, 3c, 4d commits in develop, and realise that they should be in separate
+branch. One of ways to solve this:
+Create and checkout to a branch where you want these commits to be:
+1. $>git checkout -b extraCommits (now these commits in two branches develop and extraCommits);
+Recreate a develop branch with TOP on commit before you made a 1a, 2b, 3c commits:
+2. $>git branch -f develop 1a (force needed because git won't let you to create existing branch)
+That's all, now branch extraCommits has 2b, 3c, 4d commits, and develop is on 1a commit.
+If you change your mind - you can set develop back
+$>git branch -f develop extraCommits (instead 4d commit, you can set a branch name,
+it will set TOP of develop to the commit that extraCommits' HEAD is pointing to)
+
+Same stuff we can do with checkout.
+1. $>git checkout -b extraCommits
+2. $>git checkout -B develop 1a (-B - for existing branch, it will set HEAD for develop to 1a);
+
+Detached HEAD.
+You can switch to any commit that you like
+$>git co 3c
+But be aware that this is state of detached HEAD, means you are not in branch
+your HEAD is pointing on commit, not on branch's TOP. And if you will do a commit in this state - it will be
+nowhere, if you like to continue working from this state - you can create a new branch for this
+commit.
+$>git cob/branch branchFromDetached
+Or if you've made detached commit 3c-detached, you can cherry-pick it to your branch, it takes this commit and 
+move it to your branch.
+$>git cherry-pick ej32
+
+To checkout some file from previous commit - in current branch
+git co 1mj3n4 neededFileFromPreviousCommit.
+
+When you pass a commit id / or branch name (with is equal to commit branch TOP pointing to)
+and pass a file name/directory/few files name - git doesn't switch a branch, it returns a file
+to state of that commit.
+
+If you want to switch file back to current directory state
+$>git co HEAD neededFileFromPreviosCommit // returns file from repository to index and working directory (current branch)
+or $>git co neededFileFromPreviosCommit // returns from index to working directory
+
+if folder named develop and you want to revert it to current state, you need to add --
+$>git co -- develop (everything after -- counts as a path, not branch)
+
+To see with what branches current was merged
+$>git branch --merged (oposite to --no-merged)

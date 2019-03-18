@@ -1,0 +1,51 @@
+CHERRY-PICK
+For example we have two branches, with two versions of our product. Development runs separately in them.
+and you realise that you have same bug in two branches. Bug is fixed in branch_v1 - you cannot merge them,
+since they are too different, but you can try to cherry-pick fix commit from branch_v1 to branch_v2.
+So the main idea is that cherry pick will grab only changes that were done in branch_v2 (fixed bug) and try
+to apply them on branch_v1. If changes did not depend on previous branch_v2 features, then it successfully 
+add them to develop.
+You cannot do the merge --squash - it will grab ALL changes from branch_v2 and you don't want them, even in
+your index in branch_v1.
+CHERRY PICK USE - GET ONE (or several) NEEDED COMMIT(s) TO FEATURE FROM DEVELOP, and don't bring anything
+else from develop. 
+
+Cherry pick has option to copy a few commits
+$>git cherry-pick -x 2j3h 5j56h 
+$>git cherry-pick -x develop..feature (all commits from point where feature divided from develop,
+all commits that not in develop from feture)
+Cherry-pick will crete commits in develop one by one.
+
+We want to chenge something in cherry-pick, so we don't want auto-commit
+$>git cherry-pick feature --no-commit (same as -n)
+
+Revert cherry-pick
+$>git cherry-pick --abort
+
+If conflict resolved
+$>git cherry-pick --continue
+
+If you want to stop cherry-picking, means we don't want to create commits from feature, after resolving current
+conflict, we can
+$>git cherry-pick --quit
+
+If we made cherry pick and realize that we don't want it. reset hard on some commit behind.
+
+When you no-conflict cherrypicing from some feature - your cherry picked commit is equivalent
+to commit from feature. There is a way to see equivalemt commits when you diff some branches
+$>git cherry develop feature -v (verbose means with commit message header)
+This shows commits from feature "-" means this commit equivalent to some feature branch
+"+" means that this commit is the sane as dome
+But in git log we have some flags to see the same thing
+$ git log feature1...develop --oneline --cherry-mark --left-right
+> 553e140 cherry-pick continue (> - right, means develop branch)
+> bbe5414 alignment
+> 6183d5d cherry pick in progress
+< 71gd5ds some feature commit (< - left, means feature branch)
+= 22dc57e some fix 
+(equal commit with 9abc78c, means cherrypicked, but truly it's doesn't matter where it is since it's equal)
+= 9abc78c (feature) some fix
+
+Or you can see commits only from prefer brench --right-only, or --left-only
+Or you can even make it simplier with
+$ git log feature1...develop --oneline --cherry (--cherry-mark, --right-only, --no-merges in one flag)

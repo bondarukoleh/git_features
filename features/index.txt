@@ -1,0 +1,12 @@
+INDEX
+#git add . -> adds only current directory
+#git add -A -> no matter where are you, adding all from root. 
+
+#To remove directory, automatically git will add this change to index
+$>git rm -r dirtoDelete
+
+Remove file from index:
+$>git reset ./someFile.js
+
+#to remove from index - but make untracked
+$>git rm -r --cached file/dirToRemoveFromCache
