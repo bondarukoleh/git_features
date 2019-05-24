@@ -109,5 +109,8 @@ $>git log --date=unix (1552579668)
 $>git log --date=short (2019-03-14)
 $>git log --date=relative (23 hours ago/8 days ago)
 $>git log --date=format:'%F %T'
-(2019-03-14 16:07:48 it's a strftime format, http://man7.org/linux/man-pages/man3/strftime.3.html)
+(2019-03-14 16:07:48 it's a starftime format, http://man7.org/linux/man-pages/man3/strftime.3.html)
 $>git log --date=format-local:'%F %T' (means don't show +0000 timezone, but it's by default as I get)
+
+log first 10 lines
+$>git log -10
