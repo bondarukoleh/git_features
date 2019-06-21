@@ -54,6 +54,13 @@ Same stuff we can do with checkout.
 1. $>git checkout -b extraCommits
 2. $>git checkout -B develop 1a (-B - for existing branch, it will set HEAD for develop to 1a);
 
+will return you to previous branch, where you've been before.
+$>git checkout -
+
+feature$>git checkout master
+master$>git pull origin master && git checkout feature
+feature$>git rebase - //rebase with master
+
 Detached HEAD.
 You can switch to any commit that you like
 $>git co 3c
