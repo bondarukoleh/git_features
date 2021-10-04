@@ -1,5 +1,5 @@
 BRANCH
-#Chery pick - to get some commit from branch and merge it with other branch 
+#Chery pick - to get some commit from branch and merge it with other branch
 
 #branch - it's just a link to some commit. You can check it in .git/refs/heads/
 # git branch -v shows the commit on what commit branch is looking
@@ -8,19 +8,19 @@ BRANCH
 
 After you done a commit - it contains information about previous commits on the base of it was created,
 and HEAD link points on last commit. Last commit in branch - called TOP of the branch.
-So important thing - 
+So important thing -
 TOP - is the last commit in branch, branch is pointing on that commit.
-HEAD - is where you are, and in most cases - HEAD is pointing on the last commit in branch - so 
+HEAD - is where you are, and in most cases - HEAD is pointing on the last commit in branch - so
 it's automatically pointing on TOP of hte branch. But if you set the HEAD to point to some other commit -
 HEAD won't be pointing on the TOP of the branch.
 
 Commits that lead to the state of current branch - belongs to branch.
-For example in maser we have 3 commits, than we checkout to feature and 
+For example in maser we have 3 commits, than we checkout to feature and
 made 2 commits more. all 5 commits belongs to feature branch, since thay lead
 to it state, and 3 commits belongs to master branch.
 
 #will delete all uncommitted changes
-$>git checkout -f branch 
+$>git checkout -f branch
 
 #will checkout on commit that HEAD refers, means return the branch in latest commit's state
 #Even that was added to index
@@ -69,7 +69,7 @@ your HEAD is pointing on commit, not on branch's TOP. And if you will do a commi
 nowhere, if you like to continue working from this state - you can create a new branch for this
 commit.
 $>git cob/branch branchFromDetached
-Or if you've made detached commit 3c-detached, you can cherry-pick it to your branch, it takes this commit and 
+Or if you've made detached commit 3c-detached, you can cherry-pick it to your branch, it takes this commit and
 move it to your branch.
 $>git cherry-pick ej32
 
@@ -89,3 +89,23 @@ $>git co -- develop (everything after -- counts as a path, not branch)
 
 To see with what branches current was merged
 $>git branch --merged (oposite to --no-merged)
+
+Remote branches
+The command
+git branch -a
+shows remote branches that exist in your local repository.
+There is a difference between a remote branch, and a branch that exists in a remote repository.
+Remote branches are local branches that map to branches of the remote repository.
+
+The usual way to update the list of remote branches is to use git fetch.
+This automatically gets an updated list of branches from the remote and sets up remote branches in the local repository,
+by default, git fetch does not remove remote branches that no longer have a mapped branch on the remote.
+In order to do that, you explicitly need to prune the list of remote branches:
+git fetch --prune
+
+This will automatically get rid of remote branches that no longer exist on the remote.
+Afterwards, git branch -r will show you an updated list of branches that really exist on the remote:
+And those you can delete using git push.
+git push origin --delete branch_name_on_remote_repo,
+
+Specify the name of the branch on the remote repository not the name of your remote branch.
