@@ -123,11 +123,12 @@ git status
 git branch -vv
 
 But be aware, git pull - fetches and merges all the branches, in the repo (default behaviour), 
-if you want only your branch (if it's tracked), you need to mention the origin
-$>git pull origin
+if you want only your branch (if it's tracked), you need to do:
+$>git pull --rebase origin feature/foo
 
 If you forgot to track the branch, you can do from the branch
 $>git branch -u origin/feature/foo
 
-
-
+If you want to fetch the origin state and compare it with local:
+$>git fetch origin feature/foo
+$>git show FETCH_HEAD
