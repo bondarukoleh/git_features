@@ -109,3 +109,25 @@ And those you can delete using git push.
 git push origin --delete branch_name_on_remote_repo,
 
 Specify the name of the branch on the remote repository not the name of your remote branch.
+
+SWITCH
+Instead of checkout, you can use switch between branches.
+
+-c create, -t track
+$>git switch -c feature/foo -t origin/feature/foo
+
+If you tracking the branch, it gives you shorter commands in the branch
+git pull
+git push
+git status
+git branch -vv
+
+But be aware, git pull - fetches and merges all the branches, in the repo (default behaviour), 
+if you want only your branch (if it's tracked), you need to mention the origin
+$>git pull origin
+
+If you forgot to track the branch, you can do from the branch
+$>git branch -u origin/feature/foo
+
+
+
