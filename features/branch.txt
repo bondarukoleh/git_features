@@ -116,6 +116,17 @@ Instead of checkout, you can use switch between branches.
 -c create, -t track
 $>git switch -c feature/foo -t origin/feature/foo
 
+# Create a branch from the one you are standing on
+git switch -c branch1
+
+# Create branch1 from origin branch origin/branch1. Don't forget to fetch the desired branch first.
+git fetch origin branch1
+git switch -c branch1 origin/branch1
+
+# The same as above, but also sets the upstream tracking
+git fetch origin branch1
+git switch -c branch1 --track origin/branch1
+
 If you tracking the branch, it gives you shorter commands in the branch
 git pull
 git push
